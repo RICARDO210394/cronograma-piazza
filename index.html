@@ -893,74 +893,133 @@ function printLegendHtml(){
   return html;
 }
 
+function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPiazzaCol){
+  var lastDay=daysInMonth(state.year,m);
+  var from=Math.max(1,Math.min(dayFrom,lastDay));
+  var to=Math.max(from,Math.min(dayTo,lastDay));
+  var daysMonth=generateMonthDays(state.year,m).filter(function(d){return d.day>=from && d.day<=to;});
+  if(!daysMonth.length) return '';
+  var flatItems=[];
+  piazzasForTable.forEach(function(pz){
+    pz.items.filter(function(it){return categories.indexOf(it.category)!==-1;}).forEach(function(item){
+      flatItems.push({pz:pz,item:item});
+    });
+  });
+  /* Ordenado por el día marcado más antiguo dentro de este mes (ascendente);
+     los pendientes sin ninguna marca quedan al final. */
+  flatItems.forEach(function(r){ r.mark=earliestMarkedDay(r.item,[m]); });
+  /* Solo se exportan los pendientes que tienen al menos una marca
+     dentro de ESTE mes: así no salen renglones sin pendiente ni los
+     que ya quedaron resueltos/marcados en un mes anterior. */
+  flatItems=flatItems.filter(function(r){ return !!r.mark; });
+  flatItems.sort(function(a,b){ return a.mark.key-b.mark.key; });
+  if(!flatItems.length) return '';
+  /* Ancho fijo (en %) para cada columna, vía <colgroup> (ver más abajo).
+     Antes "Piazza" y "Pendiente" usaban white-space:nowrap, así que un
+     texto largo empujaba la tabla más allá del ancho de la página y el
+     navegador recortaba los últimos días del mes al imprimir (no los
+     movía a otra hoja); ahora el texto largo se envuelve en líneas en
+     vez de ensanchar la tabla, así que siempre entran los 28–31 días.
+     Cuando no hay columna de Piazza (exportación separada por Piazza,
+     ver renderPrintArea) esas letras se le ceden a "Pendiente". */
+  var pctPiazza=showPiazzaCol?9:0, pctPendiente=showPiazzaCol?23:30;
+  var pctPerDay=((100-pctPiazza-pctPendiente)/daysMonth.length).toFixed(3);
+  var monthHtml='';
+  /* Se traza una línea gruesa arriba de la primera fila de cada Piazza
+     (cuando cambia respecto a la fila anterior) para separarlas
+     visualmente, ya que la lista está ordenada por día marcado y no
+     agrupada bajo un encabezado de Piazza. No aplica cuando ya se exportó
+     una sola Piazza por tabla (showPiazzaCol=false). */
+  var prevPzId=null;
+  flatItems.forEach(function(r){
+    var pz=r.pz, item=r.item;
+    var rowLabel=CATEGORY_LABEL_PLAIN[item.category]+(item.label?(' · '+item.label):'');
+    var isNewPz=(pz.id!==prevPzId);
+    prevPzId=pz.id;
+    var topBorder=(showPiazzaCol && isNewPz)?'border-top:3px solid #132327;':'';
+    monthHtml+='<tr>';
+    if(showPiazzaCol){
+      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:normal;word-break:break-word;font-weight:600;">'+escapeHtml(pz.name)+'</td>';
+    }
+    monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:normal;word-break:break-word;">'+escapeHtml(rowLabel)+'</td>';
+    daysMonth.forEach(function(d){
+      var c=getCell(item.id,state.year,m,d.day);
+      var col=PRINT_STATUS_COLORS[c.status];
+      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:3px;text-align:center;background:'+col.bg+';color:'+col.fg+';font-family:IBM Plex Mono,monospace;font-weight:600;">'+STATUS_ABBR[c.status]+'</td>';
+    });
+    monthHtml+='</tr>';
+  });
+  var colCount=(showPiazzaCol?2:1)+daysMonth.length;
+  var t='<div class="print-month"><h2 style="font-family:\'Big Shoulders Display\',sans-serif;font-size:19px;margin:16px 0 8px;border-bottom:2px solid #0f7a8c;padding-bottom:4px;">'+MESES[m]+' &middot; días '+pad(from)+'–'+pad(to)+' &middot; ordenado por día marcado</h2>';
+  t+='<table style="border-collapse:collapse;width:100%;table-layout:fixed;font-size:11px;">';
+  /* <colgroup> fija el ancho de cada columna de forma explícita, sin
+     depender de qué fila del thead venga primero (a diferencia de dejar
+     que table-layout:fixed lo deduzca de los <th> de la primera fila,
+     que fallaba apenas esa fila era el <th colspan> del mes: al
+     abarcar todas las columnas sin definir un ancho por columna, el
+     navegador las repartía todas por igual — Piazza y Pendiente
+     quedaban tan angostas como una columna de día). */
+  t+='<colgroup>';
+  if(showPiazzaCol) t+='<col style="width:'+pctPiazza+'%">';
+  t+='<col style="width:'+pctPendiente+'%">';
+  daysMonth.forEach(function(){ t+='<col style="width:'+pctPerDay+'%">'; });
+  t+='</colgroup><thead>';
+  /* Fila de mes propia dentro del <thead>: el navegador repite TODO el
+     thead (todas sus filas) en cada hoja impresa cuando la tabla ocupa
+     varias páginas, a diferencia del <h2> de arriba (que está fuera de
+     la tabla y solo aparece una vez). Así el mes queda visible en toda
+     hoja, sin tener que angostar cada columna de día para meterle el mes
+     (eso las hacía ilegibles con 30-31 columnas). */
+  t+='<tr><th colspan="'+colCount+'" style="text-align:left;border:1px solid #d2dfe2;padding:3px 6px;background:#d2e6ea;font-family:\'Big Shoulders Display\',sans-serif;font-size:12.5px;letter-spacing:.3px;">'+MESES[m]+' '+state.year+'</th></tr>';
+  t+='<tr>';
+  if(showPiazzaCol){
+    t+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Piazza</th>';
+  }
+  t+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Pendiente</th>';
+  daysMonth.forEach(function(d){
+    t+='<th style="border:1px solid #d2dfe2;padding:3px;background:#e7eff1;font-family:IBM Plex Mono,monospace;">'+pad(d.day)+'<br><span style="font-weight:400;">'+DIAS_ABR[d.weekday]+'</span></th>';
+  });
+  t+='</tr></thead><tbody>'+monthHtml+'</tbody></table></div>';
+  return t;
+}
+
 function renderPrintArea(filter){
   var area=document.getElementById('print-area');
   var stats=computeYearStats();
   var months=filter.months, dayFrom=filter.dayFrom, dayTo=filter.dayTo, piazzaIds=filter.piazzaIds, categories=filter.categories;
+  var separateByPiazza=!!filter.separateByPiazza;
   var html='<div style="font-family:IBM Plex Sans,sans-serif;padding:20px;color:#132327;">';
   html+='<h1 style="font-family:\'Big Shoulders Display\',sans-serif;font-size:30px;margin:0 0 3px;">Cronograma Piazza '+state.year+'</h1>';
   html+='<p style="color:#54737a;font-size:14px;margin:0 0 12px;">Pendientes del reporte de cámaras &middot; progreso '+stats.pct+'% &middot; generado '+new Date().toLocaleDateString('es-EC')+'</p>';
   html+=printLegendHtml();
   var anyContent=false;
-  for(var m=0;m<12;m++){
-    if(months.indexOf(m)===-1) continue;
-    var lastDay=daysInMonth(state.year,m);
-    var from=Math.max(1,Math.min(dayFrom,lastDay));
-    var to=Math.max(from,Math.min(dayTo,lastDay));
-    var daysMonth=generateMonthDays(state.year,m).filter(function(d){return d.day>=from && d.day<=to;});
-    if(!daysMonth.length) continue;
+  if(separateByPiazza){
+    /* Una sección por Piazza (cada una empieza en hoja nueva), con una
+       tabla por mes dentro de cada una — en vez de una sola tabla por mes
+       que mezcla todas las Piazzas seleccionadas ordenadas por día
+       marcado. Así se puede imprimir o enviar el cronograma de cada
+       Piazza por separado, aunque se generen todas en un solo PDF. */
+    var piazzasSeparate=state.piazzas.filter(function(pz){return piazzaIds.indexOf(pz.id)!==-1;});
+    piazzasSeparate.forEach(function(pz){
+      var pzHtml='';
+      for(var m=0;m<12;m++){
+        if(months.indexOf(m)===-1) continue;
+        pzHtml+=buildPrintMonthTable(m,dayFrom,dayTo,[pz],categories,false);
+      }
+      if(pzHtml){
+        html+='<div class="print-piazza"'+(anyContent?' style="page-break-before:always;"':'')+'>';
+        html+='<h1 style="font-family:\'Big Shoulders Display\',sans-serif;font-size:22px;margin:18px 0 4px;color:#0b5c6a;">'+escapeHtml(pz.name)+'</h1>';
+        html+=pzHtml+'</div>';
+        anyContent=true;
+      }
+    });
+  } else {
     var piazzasToPrint=state.piazzas.filter(function(pz){return piazzaIds.indexOf(pz.id)!==-1;});
-    var flatItems=[];
-    piazzasToPrint.forEach(function(pz){
-      pz.items.filter(function(it){return categories.indexOf(it.category)!==-1;}).forEach(function(item){
-        flatItems.push({pz:pz,item:item});
-      });
-    });
-    /* Ordenado por el día marcado más antiguo dentro de este mes (ascendente);
-       los pendientes sin ninguna marca quedan al final. */
-    flatItems.forEach(function(r){ r.mark=earliestMarkedDay(r.item,[m]); });
-    /* Solo se exportan los pendientes que tienen al menos una marca
-       dentro de ESTE mes: así no salen renglones sin pendiente ni los
-       que ya quedaron resueltos/marcados en un mes anterior. */
-    flatItems=flatItems.filter(function(r){ return !!r.mark; });
-    flatItems.sort(function(a,b){ return a.mark.key-b.mark.key; });
-    if(!flatItems.length) continue;
-    var monthHtml='';
-    /* Se traza una línea gruesa arriba de la primera fila de cada Piazza
-       (cuando cambia respecto a la fila anterior) para separarlas
-       visualmente, ya que la lista está ordenada por día marcado y no
-       agrupada bajo un encabezado de Piazza. */
-    var prevPzId=null;
-    flatItems.forEach(function(r){
-      var pz=r.pz, item=r.item;
-      var rowLabel=CATEGORY_LABEL_PLAIN[item.category]+(item.label?(' · '+item.label):'');
-      var isNewPz=(pz.id!==prevPzId);
-      prevPzId=pz.id;
-      var topBorder=isNewPz?'border-top:3px solid #132327;':'';
-      monthHtml+='<tr>';
-      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;font-weight:600;">'+escapeHtml(pz.name)+'</td>';
-      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;">'+escapeHtml(rowLabel)+'</td>';
-      daysMonth.forEach(function(d){
-        var c=getCell(item.id,state.year,m,d.day);
-        var col=PRINT_STATUS_COLORS[c.status];
-        monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:3px;text-align:center;background:'+col.bg+';color:'+col.fg+';font-family:IBM Plex Mono,monospace;font-weight:600;">'+STATUS_ABBR[c.status]+'</td>';
-      });
-      monthHtml+='</tr>';
-    });
-    anyContent=true;
-    html+='<div class="print-month"><h2 style="font-family:\'Big Shoulders Display\',sans-serif;font-size:19px;margin:16px 0 8px;border-bottom:2px solid #0f7a8c;padding-bottom:4px;">'+MESES[m]+' &middot; días '+pad(from)+'–'+pad(to)+' &middot; ordenado por día marcado</h2>';
-    html+='<table style="border-collapse:collapse;width:100%;font-size:11px;"><thead><tr>';
-    html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Piazza</th>';
-    html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Pendiente</th>';
-    daysMonth.forEach(function(d){
-      /* Se incluye día/mes (no solo el día) en cada encabezado de columna
-         porque el navegador repite este <thead> en cada hoja impresa cuando
-         la tabla ocupa varias páginas, pero NO repite el <h2> del mes de
-         arriba: sin el mes aquí, una hoja que empieza a mitad de tabla
-         queda sin ninguna referencia de a qué mes pertenece. */
-      html+='<th style="border:1px solid #d2dfe2;padding:3px;background:#e7eff1;font-family:IBM Plex Mono,monospace;">'+formatDayMonth(d.day,m)+'<br><span style="font-weight:400;">'+DIAS_ABR[d.weekday]+'</span></th>';
-    });
-    html+='</tr></thead><tbody>'+monthHtml+'</tbody></table></div>';
+    for(var m2=0;m2<12;m2++){
+      if(months.indexOf(m2)===-1) continue;
+      var t=buildPrintMonthTable(m2,dayFrom,dayTo,piazzasToPrint,categories,true);
+      if(t){ html+=t; anyContent=true; }
+    }
   }
   if(!anyContent){
     html+='<p style="color:#54737a;">No hay datos para los filtros seleccionados.</p>';
@@ -1087,6 +1146,10 @@ function openExportModal(){
   });
   html+='</div></div>';
 
+  html+='<div class="export-section"><div class="export-section-head"><span>Formato</span></div>';
+  html+='<label class="export-check"><input type="checkbox" id="export-separate-piazza"> Separar cada Piazza en su propia sección (hoja nueva por Piazza, en vez de mezclarlas en una sola tabla)</label>';
+  html+='</div>';
+
   html+='<div class="actions" style="margin-top:6px;">';
   html+='<button class="btn ghost" data-act="modal-close">Cancelar</button>';
   html+='<button class="btn primary" data-act="export-generate">Generar PDF</button>';
@@ -1109,7 +1172,8 @@ function runExportGenerate(){
     showToast('Selecciona al menos un mes, una Piazza y un tipo de pendiente');
     return;
   }
-  var has=renderPrintArea({months:months,dayFrom:dayFrom,dayTo:dayTo,piazzaIds:piazzaIds,categories:categories});
+  var separateByPiazza=!!document.getElementById('export-separate-piazza').checked;
+  var has=renderPrintArea({months:months,dayFrom:dayFrom,dayTo:dayTo,piazzaIds:piazzaIds,categories:categories,separateByPiazza:separateByPiazza});
   closeModal();
   if(!has){
     showToast('No hay datos para esos filtros');
