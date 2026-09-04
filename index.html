@@ -321,9 +321,18 @@ td.cell-col.weekend{background:var(--accent-tint);}
 #print-area{display:none;}
 @media print{
   @page{size:landscape;margin:12mm;}
-  body *{visibility:hidden;}
-  body.printing #print-area, body.printing #print-area *{visibility:visible;}
-  #print-area{display:block !important;position:absolute;left:0;top:0;width:100%;}
+  /* Antes se ocultaba todo con visibility:hidden y el print-area se sacaba
+     de flujo con position:absolute. visibility:hidden NO quita el espacio
+     que ocupan los elementos (solo los hace invisibles), así que la app
+     completa (encabezado, pestañas, tabla enorme) seguía reservando su
+     alto real detrás de la hoja impresa; y un elemento position:absolute
+     no pagina bien cuando su contenido es más alto que una hoja: Chrome lo
+     recorta a la primera página y deja páginas siguientes en blanco. Por
+     eso, en vez de eso, se sacan del árbol con display:none (no reservan
+     espacio) y #print-area queda como el único contenido, en flujo normal,
+     así el navegador lo pagina automáticamente sin huecos ni hojas vacías. */
+  body.printing > *:not(#print-area){display:none !important;}
+  body.printing #print-area{display:block !important;}
   .no-print{display:none !important;}
   .print-month{margin-bottom:14px;}
   .print-month h2{page-break-after:avoid;break-after:avoid;}
