@@ -944,7 +944,12 @@ function renderPrintArea(filter){
     html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Piazza</th>';
     html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Pendiente</th>';
     daysMonth.forEach(function(d){
-      html+='<th style="border:1px solid #d2dfe2;padding:3px;background:#e7eff1;font-family:IBM Plex Mono,monospace;">'+pad(d.day)+'<br><span style="font-weight:400;">'+DIAS_ABR[d.weekday]+'</span></th>';
+      /* Se incluye día/mes (no solo el día) en cada encabezado de columna
+         porque el navegador repite este <thead> en cada hoja impresa cuando
+         la tabla ocupa varias páginas, pero NO repite el <h2> del mes de
+         arriba: sin el mes aquí, una hoja que empieza a mitad de tabla
+         queda sin ninguna referencia de a qué mes pertenece. */
+      html+='<th style="border:1px solid #d2dfe2;padding:3px;background:#e7eff1;font-family:IBM Plex Mono,monospace;">'+formatDayMonth(d.day,m)+'<br><span style="font-weight:400;">'+DIAS_ABR[d.weekday]+'</span></th>';
     });
     html+='</tr></thead><tbody>'+monthHtml+'</tbody></table></div>';
   }
