@@ -893,7 +893,7 @@ function printLegendHtml(){
   return html;
 }
 
-function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPiazzaCol){
+function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPiazzaCol,counter){
   var lastDay=daysInMonth(state.year,m);
   var from=Math.max(1,Math.min(dayFrom,lastDay));
   var to=Math.max(from,Math.min(dayTo,lastDay));
@@ -922,8 +922,8 @@ function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPia
      vez de ensanchar la tabla, así que siempre entran los 28–31 días.
      Cuando no hay columna de Piazza (exportación separada por Piazza,
      ver renderPrintArea) esas letras se le ceden a "Pendiente". */
-  var pctPiazza=showPiazzaCol?9:0, pctPendiente=showPiazzaCol?23:30;
-  var pctPerDay=((100-pctPiazza-pctPendiente)/daysMonth.length).toFixed(3);
+  var pctNum=4, pctPiazza=showPiazzaCol?9:0, pctPendiente=showPiazzaCol?19:26;
+  var pctPerDay=((100-pctNum-pctPiazza-pctPendiente)/daysMonth.length).toFixed(3);
   var monthHtml='';
   /* Se traza una línea gruesa arriba de la primera fila de cada Piazza
      (cuando cambia respecto a la fila anterior) para separarlas
@@ -938,6 +938,7 @@ function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPia
     prevPzId=pz.id;
     var topBorder=(showPiazzaCol && isNewPz)?'border-top:3px solid #132327;':'';
     monthHtml+='<tr>';
+    monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;text-align:center;color:#54737a;font-family:IBM Plex Mono,monospace;">'+(counter.n++)+'</td>';
     if(showPiazzaCol){
       monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:normal;word-break:break-word;font-weight:600;">'+escapeHtml(pz.name)+'</td>';
     }
@@ -949,7 +950,7 @@ function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPia
     });
     monthHtml+='</tr>';
   });
-  var colCount=(showPiazzaCol?2:1)+daysMonth.length;
+  var colCount=(showPiazzaCol?3:2)+daysMonth.length;
   var t='<div class="print-month"><h2 style="font-family:\'Big Shoulders Display\',sans-serif;font-size:19px;margin:16px 0 8px;border-bottom:2px solid #0f7a8c;padding-bottom:4px;">'+MESES[m]+' &middot; días '+pad(from)+'–'+pad(to)+' &middot; ordenado por día marcado</h2>';
   t+='<table style="border-collapse:collapse;width:100%;table-layout:fixed;font-size:11px;">';
   /* <colgroup> fija el ancho de cada columna de forma explícita, sin
@@ -960,6 +961,7 @@ function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPia
      navegador las repartía todas por igual — Piazza y Pendiente
      quedaban tan angostas como una columna de día). */
   t+='<colgroup>';
+  t+='<col style="width:'+pctNum+'%">';
   if(showPiazzaCol) t+='<col style="width:'+pctPiazza+'%">';
   t+='<col style="width:'+pctPendiente+'%">';
   daysMonth.forEach(function(){ t+='<col style="width:'+pctPerDay+'%">'; });
@@ -972,6 +974,7 @@ function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPia
      (eso las hacía ilegibles con 30-31 columnas). */
   t+='<tr><th colspan="'+colCount+'" style="text-align:left;border:1px solid #d2dfe2;padding:3px 6px;background:#d2e6ea;font-family:\'Big Shoulders Display\',sans-serif;font-size:12.5px;letter-spacing:.3px;">'+MESES[m]+' '+state.year+'</th></tr>';
   t+='<tr>';
+  t+='<th style="text-align:center;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">N&deg;</th>';
   if(showPiazzaCol){
     t+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Piazza</th>';
   }
@@ -981,6 +984,27 @@ function buildPrintMonthTable(m,dayFrom,dayTo,piazzasForTable,categories,showPia
   });
   t+='</tr></thead><tbody>'+monthHtml+'</tbody></table></div>';
   return t;
+}
+
+/* Ordena una lista de Piazzas por su día marcado más antiguo dentro de los
+   meses dados (considerando solo las categorías incluidas): la que tenga
+   el pendiente marcado más temprano queda primero. Las Piazzas sin
+   ninguna marca en esos meses quedan al final. Se usa tanto para el
+   PDF "separado por Piazza" como para la exportación en PDFs individuales. */
+function sortPiazzasByEarliestMark(piazzasList,months,categories){
+  return piazzasList.map(function(pz){
+    var best=null;
+    pz.items.filter(function(it){return categories.indexOf(it.category)!==-1;}).forEach(function(item){
+      var mark=earliestMarkedDay(item,months);
+      if(mark && (!best || mark.key<best.key)) best=mark;
+    });
+    return {pz:pz,mark:best};
+  }).sort(function(a,b){
+    if(!a.mark && !b.mark) return 0;
+    if(!a.mark) return 1;
+    if(!b.mark) return -1;
+    return a.mark.key-b.mark.key;
+  }).map(function(x){return x.pz;});
 }
 
 function renderPrintArea(filter){
@@ -993,6 +1017,17 @@ function renderPrintArea(filter){
   html+='<p style="color:#54737a;font-size:14px;margin:0 0 12px;">Pendientes del reporte de cámaras &middot; progreso '+stats.pct+'% &middot; generado '+new Date().toLocaleDateString('es-EC')+'</p>';
   html+=printLegendHtml();
   var anyContent=false;
+  /* Numeración corrida (N°) de cada pendiente exportado: empieza en 1 y se
+     va incrementando por cada renglón, sin importar el mes o la Piazza —
+     un objeto mutable {n} en vez de una variable simple para que
+     buildPrintMonthTable pueda ir aumentándola en cada llamada (una por
+     mes, o una por mes y Piazza si "separar por Piazza" está activo) y el
+     conteo siga corrido a lo largo de TODO el documento. Como cada llamada
+     a renderPrintArea arranca su propio contador en 1, la exportación "un
+     PDF por Piazza" (que llama a renderPrintArea una vez por Piazza)
+     automáticamente numera cada documento por separado desde el 1,
+     sin tener que coincidir con la numeración del documento general. */
+  var counter={n:1};
   if(separateByPiazza){
     /* Una sección por Piazza (cada una empieza en hoja nueva), con una
        tabla por mes dentro de cada una — en vez de una sola tabla por mes
@@ -1000,11 +1035,17 @@ function renderPrintArea(filter){
        marcado. Así se puede imprimir o enviar el cronograma de cada
        Piazza por separado, aunque se generen todas en un solo PDF. */
     var piazzasSeparate=state.piazzas.filter(function(pz){return piazzaIds.indexOf(pz.id)!==-1;});
+    /* Las Piazzas se ordenan por su día marcado más antiguo (considerando
+       todos los meses seleccionados): la que tenga el pendiente marcado
+       más temprano sale primero, y así sucesivamente. Las que no tengan
+       ninguna marca en esos meses quedan al final (y de hecho no generan
+       ninguna tabla, así que ni aparecen). */
+    piazzasSeparate=sortPiazzasByEarliestMark(piazzasSeparate,months,categories);
     piazzasSeparate.forEach(function(pz){
       var pzHtml='';
       for(var m=0;m<12;m++){
         if(months.indexOf(m)===-1) continue;
-        pzHtml+=buildPrintMonthTable(m,dayFrom,dayTo,[pz],categories,false);
+        pzHtml+=buildPrintMonthTable(m,dayFrom,dayTo,[pz],categories,false,counter);
       }
       if(pzHtml){
         html+='<div class="print-piazza"'+(anyContent?' style="page-break-before:always;"':'')+'>';
@@ -1017,7 +1058,7 @@ function renderPrintArea(filter){
     var piazzasToPrint=state.piazzas.filter(function(pz){return piazzaIds.indexOf(pz.id)!==-1;});
     for(var m2=0;m2<12;m2++){
       if(months.indexOf(m2)===-1) continue;
-      var t=buildPrintMonthTable(m2,dayFrom,dayTo,piazzasToPrint,categories,true);
+      var t=buildPrintMonthTable(m2,dayFrom,dayTo,piazzasToPrint,categories,true,counter);
       if(t){ html+=t; anyContent=true; }
     }
   }
@@ -1148,7 +1189,10 @@ function openExportModal(){
 
   html+='<div class="export-section"><div class="export-section-head"><span>Formato</span></div>';
   html+='<label class="export-check"><input type="checkbox" id="export-separate-piazza"> Separar cada Piazza en su propia sección (hoja nueva por Piazza, en vez de mezclarlas en una sola tabla)</label>';
-  html+='</div>';
+  html+='<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);">';
+  html+='<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">¿Prefieres un archivo PDF por cada Piazza en vez de uno solo? Se abrirá un cuadro para "Guardar como PDF" por cada Piazza seleccionada, uno tras otro.</div>';
+  html+='<button type="button" class="btn" data-act="export-generate-separate-files" style="width:100%;">&#128196; Un PDF por cada Piazza</button>';
+  html+='</div></div>';
 
   html+='<div class="actions" style="margin-top:6px;">';
   html+='<button class="btn ghost" data-act="modal-close">Cancelar</button>';
@@ -1183,6 +1227,48 @@ function runExportGenerate(){
   setTimeout(function(){
     window.print();
   },50);
+}
+
+/* Genera un PDF por cada Piazza seleccionada: como el navegador solo puede
+   tener un cuadro de "Guardar como PDF" abierto a la vez, se van
+   encadenando impresiones una por una (cada una con una sola Piazza, usando
+   el mismo diseño compacto de "separar por Piazza" sin la columna Piazza).
+   El evento 'afterprint' avisa cuando el usuario cerró o guardó el cuadro
+   de impresión, y ahí se dispara la siguiente Piazza de la cola. */
+function runExportGenerateSeparateFiles(){
+  var months=Array.prototype.map.call(document.querySelectorAll('[data-kind="month"]:checked'),function(cb){return parseInt(cb.value,10);});
+  var piazzaIds=Array.prototype.map.call(document.querySelectorAll('[data-kind="piazza"]:checked'),function(cb){return cb.value;});
+  var categories=Array.prototype.map.call(document.querySelectorAll('[data-kind="category"]:checked'),function(cb){return cb.value;});
+  var dayFrom=parseInt(document.getElementById('export-day-from').value,10)||1;
+  var dayTo=parseInt(document.getElementById('export-day-to').value,10)||31;
+  if(dayFrom>dayTo){var tmp=dayFrom;dayFrom=dayTo;dayTo=tmp;}
+  if(!months.length || !piazzaIds.length || !categories.length){
+    showToast('Selecciona al menos un mes, una Piazza y un tipo de pendiente');
+    return;
+  }
+  var queue=sortPiazzasByEarliestMark(state.piazzas.filter(function(pz){return piazzaIds.indexOf(pz.id)!==-1;}),months,categories);
+  closeModal();
+  if(!queue.length) return;
+  var idx=-1;
+  function onAfterPrint(){
+    setTimeout(printNext,300);
+  }
+  function printNext(){
+    idx++;
+    if(idx>=queue.length){
+      document.body.classList.remove('printing');
+      window.removeEventListener('afterprint',onAfterPrint);
+      showToast('Listo: guarda cada cuadro como PDF para tener un archivo por Piazza');
+      return;
+    }
+    var has=renderPrintArea({months:months,dayFrom:dayFrom,dayTo:dayTo,piazzaIds:[queue[idx].id],categories:categories,separateByPiazza:true});
+    if(!has){ printNext(); return; }
+    document.body.classList.add('printing');
+    setTimeout(function(){ window.print(); },80);
+  }
+  window.addEventListener('afterprint',onAfterPrint);
+  showToast('Se abrirá un cuadro de impresión por cada Piazza ('+queue.length+' en total): elige "Guardar como PDF" en cada uno');
+  setTimeout(printNext,500);
 }
 
 /* ---------- events ---------- */
@@ -1398,6 +1484,7 @@ function onModalClick(e){
   if(el.dataset.act==='export-all-piazzas'){setAllChecks('piazza',true);return;}
   if(el.dataset.act==='export-none-piazzas'){setAllChecks('piazza',false);return;}
   if(el.dataset.act==='export-generate'){runExportGenerate();return;}
+  if(el.dataset.act==='export-generate-separate-files'){runExportGenerateSeparateFiles();return;}
   if(el.dataset.act==='clear-confirm'){
     var clStatus=el.dataset.status||null;
     var n=clearCells(clStatus);
