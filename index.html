@@ -910,12 +910,11 @@ function renderPrintArea(filter){
     /* Ordenado por el día marcado más antiguo dentro de este mes (ascendente);
        los pendientes sin ninguna marca quedan al final. */
     flatItems.forEach(function(r){ r.mark=earliestMarkedDay(r.item,[m]); });
-    flatItems.sort(function(a,b){
-      if(!a.mark && !b.mark) return 0;
-      if(!a.mark) return 1;
-      if(!b.mark) return -1;
-      return a.mark.key-b.mark.key;
-    });
+    /* Solo se exportan los pendientes que tienen al menos una marca
+       dentro de ESTE mes: así no salen renglones sin pendiente ni los
+       que ya quedaron resueltos/marcados en un mes anterior. */
+    flatItems=flatItems.filter(function(r){ return !!r.mark; });
+    flatItems.sort(function(a,b){ return a.mark.key-b.mark.key; });
     if(!flatItems.length) continue;
     var monthHtml='';
     /* Se traza una línea gruesa arriba de la primera fila de cada Piazza
@@ -926,14 +925,12 @@ function renderPrintArea(filter){
     flatItems.forEach(function(r){
       var pz=r.pz, item=r.item;
       var rowLabel=CATEGORY_LABEL_PLAIN[item.category]+(item.label?(' · '+item.label):'');
-      var markText=r.mark?formatDayMonth(r.mark.day,r.mark.month):'—';
       var isNewPz=(pz.id!==prevPzId);
       prevPzId=pz.id;
       var topBorder=isNewPz?'border-top:3px solid #132327;':'';
       monthHtml+='<tr>';
       monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;font-weight:600;">'+escapeHtml(pz.name)+'</td>';
       monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;">'+escapeHtml(rowLabel)+'</td>';
-      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;text-align:center;font-family:IBM Plex Mono,monospace;">'+markText+'</td>';
       daysMonth.forEach(function(d){
         var c=getCell(item.id,state.year,m,d.day);
         var col=PRINT_STATUS_COLORS[c.status];
@@ -946,7 +943,6 @@ function renderPrintArea(filter){
     html+='<table style="border-collapse:collapse;width:100%;font-size:11px;"><thead><tr>';
     html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Piazza</th>';
     html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Pendiente</th>';
-    html+='<th style="text-align:center;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">1er día marcado</th>';
     daysMonth.forEach(function(d){
       html+='<th style="border:1px solid #d2dfe2;padding:3px;background:#e7eff1;font-family:IBM Plex Mono,monospace;">'+pad(d.day)+'<br><span style="font-weight:400;">'+DIAS_ABR[d.weekday]+'</span></th>';
     });
