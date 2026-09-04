@@ -1,0 +1,1502 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Cronograma Piazza</title><link id="font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"><style>
+:root{
+  --bg:#f1f6f7;
+  --surface:#ffffff;
+  --surface-2:#e7eff1;
+  --surface-3:#dbe6e9;
+  --border:#d2dfe2;
+  --text:#132327;
+  --text-muted:#54737a;
+  --accent:#0f7a8c;
+  --accent-strong:#0b5c6a;
+  --accent-tint:#dcf0f2;
+  --st-pend:#b8730a;
+  --st-pend-bg:#fdf0d8;
+  --st-proc:#2255c4;
+  --st-proc-bg:#e1eafc;
+  --st-term:#1f8f5c;
+  --st-term-bg:#dcf3e7;
+  --st-noc:#c8323a;
+  --st-noc-bg:#fbe2e2;
+  --st-vac-bg:#eef3f4;
+  --shadow:0 1px 2px rgba(15,40,45,.06),0 6px 20px -8px rgba(15,40,45,.12);
+  --stickybar-h:0px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1416;
+    --surface:#121c1f;
+    --surface-2:#182528;
+    --surface-3:#20302f;
+    --border:#28383c;
+    --text:#e6eef0;
+    --text-muted:#93a9ae;
+    --accent:#35b6c7;
+    --accent-strong:#63d3e1;
+    --accent-tint:#173338;
+    --st-pend:#e3a53d;
+    --st-pend-bg:#33280f;
+    --st-proc:#6f9bf5;
+    --st-proc-bg:#132342;
+    --st-term:#4fcf95;
+    --st-term-bg:#0f3226;
+    --st-noc:#f0787d;
+    --st-noc-bg:#3a1416;
+    --st-vac-bg:#182528;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px -8px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c1416;
+  --surface:#121c1f;
+  --surface-2:#182528;
+  --surface-3:#20302f;
+  --border:#28383c;
+  --text:#e6eef0;
+  --text-muted:#93a9ae;
+  --accent:#35b6c7;
+  --accent-strong:#63d3e1;
+  --accent-tint:#173338;
+  --st-pend:#e3a53d;
+  --st-pend-bg:#33280f;
+  --st-proc:#6f9bf5;
+  --st-proc-bg:#132342;
+  --st-term:#4fcf95;
+  --st-term-bg:#0f3226;
+  --st-noc:#f0787d;
+  --st-noc-bg:#3a1416;
+  --st-vac-bg:#182528;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px -8px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;}
+html{color-scheme:light dark;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;}
+.display{font-family:'Big Shoulders Display',system-ui,sans-serif;}
+#app{max-width:none;margin:0 auto;padding:0 28px 64px;}
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;}
+input,textarea,select{font-family:inherit;}
+
+/* fixed header wrapper: position:fixed (not sticky) so it stays pinned to the
+   viewport no matter what ancestor scroll containers do. #sticky-spacer below
+   reserves the space it would otherwise occupy in normal flow. */
+#sticky-top{
+  position:fixed;top:0;left:0;right:0;z-index:30;background:var(--bg);
+  max-width:none;margin:0 auto;padding:20px 28px 12px;box-sizing:border-box;
+  border-bottom:1px solid var(--border);
+  -webkit-transform:translateZ(0);transform:translateZ(0);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
+#sticky-spacer{height:var(--stickybar-h,150px);}
+
+/* header */
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+.brand h1{
+  font-family:'Big Shoulders Display',system-ui,sans-serif;
+  font-weight:800;
+  font-size:clamp(28px,4vw,38px);
+  letter-spacing:.2px;
+  line-height:1;
+  margin:0 0 4px;
+  text-wrap:balance;
+}
+.brand .sub{color:var(--text-muted);font-size:13.5px;margin:0;}
+.topbar-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.year-stepper{display:flex;align-items:center;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--shadow);}
+.year-stepper button{width:28px;height:28px;border:0;background:transparent;color:var(--text);border-radius:7px;font-size:15px;line-height:1;}
+.year-stepper button:hover{background:var(--surface-2);}
+.year-stepper .year-val{min-width:52px;text-align:center;font-weight:600;font-size:14.5px;}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;font-weight:600;
+  box-shadow:var(--shadow);
+}
+.btn:hover{border-color:var(--accent);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#052226;}
+.btn.primary:hover{background:var(--accent-strong);border-color:var(--accent-strong);}
+.btn.ghost{background:transparent;box-shadow:none;}
+.btn.danger{background:var(--st-noc-bg);border-color:var(--st-noc);color:var(--st-noc);}
+.btn.danger:hover{background:var(--st-noc);border-color:var(--st-noc);color:#fff;}
+.status-badge{font-size:12px;font-weight:600;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--st-term);}
+.dot.readonly{background:var(--st-pend);}
+
+/* summary */
+.summary{display:grid;grid-template-columns:repeat(4,1fr) 1.3fr;gap:10px;margin-bottom:18px;}
+@media (max-width:820px){.summary{grid-template-columns:repeat(2,1fr);}}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);}
+.stat .n{font-family:'IBM Plex Mono';font-weight:600;font-size:22px;line-height:1;}
+.stat .l{font-size:11.5px;color:var(--text-muted);margin-top:5px;text-transform:uppercase;letter-spacing:.4px;}
+.stat.pend .n{color:var(--st-pend);}
+.stat.proc .n{color:var(--st-proc);}
+.stat.term .n{color:var(--st-term);}
+.stat.noc .n{color:var(--st-noc);}
+.stat.progress{display:flex;flex-direction:column;justify-content:center;}
+.progress-bar{height:8px;border-radius:5px;background:var(--surface-2);overflow:hidden;margin-top:8px;}
+.progress-bar > div{height:100%;background:var(--st-term);border-radius:5px;transition:width .25s ease;}
+
+/* month tabs */
+.month-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;}
+.month-tabs::-webkit-scrollbar{height:5px;}
+.month-tab{
+  flex:0 0 auto;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);
+  padding:7px 14px;border-radius:9px;font-family:'Big Shoulders Display';font-weight:700;
+  font-size:14px;letter-spacing:.3px;text-transform:uppercase;
+}
+.month-tab.active{background:var(--accent);border-color:var(--accent);color:#052226;}
+.month-tab .cnt{font-family:'IBM Plex Mono';font-weight:500;font-size:10.5px;opacity:.75;margin-left:5px;}
+
+/* piazza filter chips */
+.piazza-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px;}
+.piazza-tab{
+  flex:0 0 auto;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);
+  padding:5px 12px;border-radius:8px;font-size:11.5px;font-weight:600;
+}
+.piazza-tab.active{background:var(--accent);border-color:var(--accent);color:#052226;}
+
+/* grid card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;}
+.grid-scroll{overflow:auto;max-height:var(--grid-max-h,70vh);-webkit-overflow-scrolling:touch;}
+table.sched{border-collapse:separate;border-spacing:0;width:100%;}
+table.sched th,table.sched td{border-bottom:1px solid var(--border);}
+/* Frozen header row / frozen left column: implemented with a JS scroll
+   listener that sets a translate3d() transform directly (see wireGridFreeze
+   in the script), NOT with position:sticky. Some WebKit builds fail to
+   repaint sticky cells correctly inside a table with two-axis scrolling,
+   which is exactly this grid — a plain transform is old, boring CSS that
+   every engine composites correctly, so it doesn't have that failure mode. */
+table.sched thead th{
+  position:relative;background:var(--surface-2);z-index:2;
+  font-size:11.5px;color:var(--text-muted);font-weight:600;padding:8px 4px;text-align:center;white-space:nowrap;
+  will-change:transform;
+}
+table.sched thead th.weekend{background:var(--accent-tint);}
+table.sched thead th .wk{display:block;font-family:'IBM Plex Mono';font-size:12.5px;color:var(--text);font-weight:600;}
+table.sched thead th .rng{display:block;font-family:'IBM Plex Mono';font-size:9.5px;margin-top:1px;text-transform:uppercase;}
+table.sched thead th .mo{display:block;font-family:'IBM Plex Mono';font-size:8.5px;margin-top:1px;text-transform:uppercase;color:var(--accent);font-weight:700;letter-spacing:.3px;}
+th.rowhead-col,td.rowhead-col{
+  position:relative;background:var(--surface);z-index:3;
+  min-width:360px;max-width:360px;padding:8px 10px;border-right:1px solid var(--border);
+  will-change:transform;
+}
+thead th.rowhead-col{z-index:4;background:var(--surface-2);}
+
+tr.piazza-group td.rowhead-col{background:var(--surface-3);}
+tr.piazza-group td.piazza-head-fill{background:var(--surface-3);}
+.piazza-name{
+  width:100%;border:1px solid transparent;background:transparent;color:var(--text);
+  font-weight:700;font-size:14px;padding:4px 6px;border-radius:6px;
+}
+.piazza-name:hover,.piazza-name:focus{border-color:var(--border);background:var(--surface);outline:none;}
+.row-tools{display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap;}
+.row-tools .rm,.row-tools .add-link{border:0;background:transparent;color:var(--text-muted);font-size:11px;padding:1px 4px;border-radius:5px;font-weight:600;}
+.row-tools .rm:hover{color:var(--st-noc);background:var(--st-noc-bg);}
+.row-tools .add-link:hover{color:var(--accent);background:var(--accent-tint);}
+
+.item-head{display:flex;flex-direction:column;gap:3px;}
+.item-label{
+  width:100%;border:1px solid transparent;background:transparent;color:var(--text-muted);
+  font-size:11.5px;padding:2px 6px;border-radius:6px;
+}
+.item-label:hover,.item-label:focus{border-color:var(--border);background:var(--surface-2);outline:none;}
+
+tr.category-group td.rowhead-col.category-head{background:var(--surface-2);font-weight:700;font-size:12.5px;color:var(--text);padding:6px 10px;}
+tr.category-group td.category-head-fill{background:var(--surface-2);}
+.category-head-row{display:flex;align-items:center;gap:6px;}
+.item-head-simple{display:flex;align-items:center;gap:8px;padding-left:24px;}
+.item-head-simple.flat{padding-left:10px;flex-wrap:wrap;row-gap:4px;}
+.item-head-simple .item-label{flex:1 1 90px;color:var(--text);font-size:13px;min-width:0;}
+.item-head-simple .rm{border:0;background:transparent;color:var(--text-muted);font-size:11px;padding:1px 4px;border-radius:5px;font-weight:600;flex-shrink:0;}
+.item-head-simple .rm:hover{color:var(--st-noc);background:var(--st-noc-bg);}
+.item-meta{display:flex;align-items:center;gap:8px;flex:1 1 100%;line-height:1.3;}
+.item-meta .item-meta-pz{font-size:11px;font-weight:700;color:var(--accent-strong);}
+.item-meta .item-meta-cat{font-size:10.5px;font-weight:600;color:var(--text-muted);}
+.item-meta .item-meta-day{font-size:10.5px;font-weight:700;color:var(--accent);margin-left:auto;font-family:'IBM Plex Mono';white-space:nowrap;}
+.item-meta .item-meta-day.none{color:var(--text-muted);font-weight:600;}
+tr.add-pendiente-row td.rowhead-col{padding:5px 10px 5px 30px;background:var(--surface);}
+.quick-add-input{
+  width:100%;border:1px dashed var(--border);background:transparent;color:var(--text-muted);
+  font-size:11.5px;padding:5px 8px;border-radius:6px;
+}
+.quick-add-input:hover,.quick-add-input:focus{border-color:var(--accent);color:var(--text);background:var(--accent-tint);outline:none;}
+
+td.cell-col{padding:3px;text-align:center;min-width:38px;}
+td.cell-col.weekend{background:var(--accent-tint);}
+.cell{
+  position:relative;width:100%;height:34px;border-radius:8px;border:1px solid var(--border);
+  background:var(--st-vac-bg);display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono';font-weight:600;font-size:12px;color:var(--text-muted);
+}
+.cell:hover{border-color:var(--accent);}
+.cell:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.cell.pendiente{background:var(--st-pend-bg);color:var(--st-pend);border-color:transparent;}
+.cell.en-proceso{background:var(--st-proc-bg);color:var(--st-proc);border-color:transparent;}
+.cell.terminado{background:var(--st-term-bg);color:var(--st-term);border-color:transparent;}
+.cell.no-concluido{background:var(--st-noc-bg);color:var(--st-noc);border-color:transparent;}
+.note-flag{position:absolute;top:3px;right:4px;width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.8;}
+.note-btn{position:absolute;bottom:-3px;right:-3px;width:16px;height:16px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-size:9px;display:flex;align-items:center;justify-content:center;line-height:1;}
+.note-btn:hover{color:var(--accent);border-color:var(--accent);}
+.add-row-cell{padding:10px;}
+.add-row-btn{border:1px dashed var(--border);background:transparent;color:var(--text-muted);border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:600;width:100%;}
+.add-row-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.card-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);}
+.card-toolbar button{border:0;background:transparent;color:var(--text-muted);font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:6px;}
+.card-toolbar button:hover{background:var(--surface-2);color:var(--accent);}
+.card-toolbar .toolbar-group{display:flex;align-items:center;gap:6px;}
+.sort-label{font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-right:2px;}
+.sort-btn{border:1px solid var(--border)!important;background:var(--surface);color:var(--text-muted);font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:7px;}
+.sort-btn:hover{border-color:var(--accent)!important;color:var(--accent);}
+.sort-btn.active{background:var(--accent);border-color:var(--accent)!important;color:#052226;}
+.clear-menu{position:relative;}
+.clear-menu summary{list-style:none;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:7px;}
+.clear-menu summary::-webkit-details-marker{display:none;}
+.clear-menu summary:hover{border-color:var(--st-noc);color:var(--st-noc);}
+.clear-menu[open] summary{border-color:var(--st-noc);color:var(--st-noc);}
+.clear-menu-list{position:absolute;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:6px;display:flex;flex-direction:column;gap:2px;min-width:175px;z-index:20;}
+.clear-menu-list button{text-align:left;border:0;background:transparent;color:var(--text);font-size:12.5px;font-weight:500;padding:7px 10px;border-radius:6px;white-space:nowrap;width:100%;}
+.clear-menu-list button:hover{background:var(--st-noc-bg);color:var(--st-noc);}
+.piazza-head-row{display:flex;align-items:center;gap:6px;}
+.collapse-toggle{border:0;background:transparent;color:var(--text-muted);font-size:12px;width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:transform .15s ease;}
+.collapse-toggle:hover{background:var(--surface-2);color:var(--accent);}
+.collapse-toggle.collapsed{transform:rotate(-90deg);}
+.piazza-head-row .piazza-name{flex:1;}
+.piazza-mini-stats{font-size:10.5px;color:var(--text-muted);margin-top:3px;font-family:'IBM Plex Mono';line-height:1.5;padding-left:26px;}
+.piazza-mini-stats b{color:var(--text);font-weight:600;}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);}
+.legend .item{display:flex;align-items:center;gap:6px;}
+.legend .sw{width:12px;height:12px;border-radius:4px;}
+.legend .sw.pendiente{background:var(--st-pend);}
+.legend .sw.en-proceso{background:var(--st-proc);}
+.legend .sw.terminado{background:var(--st-term);}
+.legend .sw.no-concluido{background:var(--st-noc);}
+.legend .sw.vacio{background:var(--st-vac-bg);border:1px solid var(--border);}
+.legend .hint{margin-left:auto;font-style:normal;}
+
+/* modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,20,22,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);width:100%;max-width:380px;padding:18px;}
+.modal h3{margin:0 0 3px;font-size:16px;font-family:'Big Shoulders Display';font-weight:700;letter-spacing:.2px;}
+.modal .meta{color:var(--text-muted);font-size:12px;margin-bottom:10px;}
+.modal textarea{width:100%;min-height:90px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);padding:9px;font-size:13.5px;resize:vertical;}
+.modal .status-row{display:flex;gap:6px;margin:10px 0 14px;flex-wrap:wrap;}
+.modal .status-choice{border:1px solid var(--border);background:transparent;border-radius:8px;padding:6px 9px;font-size:12px;font-weight:600;color:var(--text-muted);}
+.modal .status-choice.active{border-color:currentColor;}
+.modal .status-choice.pendiente{color:var(--st-pend);}
+.modal .status-choice.en-proceso{color:var(--st-proc);}
+.modal .status-choice.terminado{color:var(--st-term);}
+.modal .status-choice.no-concluido{color:var(--st-noc);}
+.modal .status-choice.vacio{color:var(--text-muted);}
+.modal .status-choice.active{background:currentColor;}
+.modal .status-choice.active.pendiente{background:var(--st-pend-bg);}
+.modal .status-choice.active.en-proceso{background:var(--st-proc-bg);}
+.modal .status-choice.active.terminado{background:var(--st-term-bg);}
+.modal .status-choice.active.no-concluido{background:var(--st-noc-bg);}
+.modal .status-choice.active.vacio{background:var(--surface-2);}
+.modal .actions{display:flex;justify-content:flex-end;gap:8px;}
+.modal.export-modal{max-width:460px;max-height:82vh;overflow-y:auto;}
+.export-section{margin-bottom:14px;}
+.export-section-head{display:flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--text-muted);margin-bottom:6px;}
+.export-section-head .link-btn{border:0;background:transparent;color:var(--accent);font-size:11.5px;font-weight:600;padding:0 2px;text-transform:none;letter-spacing:0;}
+.export-section-head .link-btn:first-of-type{margin-left:auto;}
+.export-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.export-grid.piazzas{grid-template-columns:repeat(2,1fr);max-height:150px;overflow-y:auto;padding-right:4px;}
+.export-grid.categories{grid-template-columns:1fr 1fr;}
+.export-check{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text);}
+.export-check input{accent-color:var(--accent);}
+.export-day-range{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted);}
+.export-day-range input{width:60px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:6px;padding:5px 7px;font-family:'IBM Plex Mono';}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:9px 16px;border-radius:20px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow);z-index:60;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+.toast.show{opacity:1;}
+
+#print-area{display:none;}
+@media print{
+  @page{size:landscape;margin:12mm;}
+  body *{visibility:hidden;}
+  body.printing #print-area, body.printing #print-area *{visibility:visible;}
+  #print-area{display:block !important;position:absolute;left:0;top:0;width:100%;}
+  .no-print{display:none !important;}
+  .print-month{margin-bottom:14px;}
+  .print-month h2{page-break-after:avoid;break-after:avoid;}
+  .print-legend{page-break-inside:avoid;break-inside:avoid;}
+  * {-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+</head><body><div id="app"></div><div id="print-area" style="display:none"></div><div id="modal-root"></div><div class="toast" id="toast"></div><script id="state-data" type="application/json">{"year": 2026, "selectedMonths": [8, 9], "piazzas": [{"id": "pjt82bnn", "name": "Samborondón", "collapsed": false, "items": [{"id": "p4zqmusm", "category": "panico", "label": "Local 2C - PSB DINASTIA (Zona 8) — No Operativo"}, {"id": "p9jvq7ub", "category": "panico", "label": "Local 15B - PSB ESSCOFFE (Zona 38) — No Operativo"}, {"id": "pz3i414n", "category": "panico", "label": "Local 16B - PSB SOLCA (Zona 40) — No Operativo"}, {"id": "p75dh2t1", "category": "panico", "label": "Local 8B - PSB GOLD INFINITY (Zona 31) — No Operativo"}, {"id": "pzvle7ic", "category": "panico", "label": "Local 8.1 - PSB VANITTE (Zona 19) — No Operativo"}, {"id": "pqspsoeb", "category": "panico", "label": "Local 8.3 - PSB VANITTE (Zona 16) — No Operativo"}, {"id": "pylwnrm0", "category": "panico", "label": "Local 1 - PSB FYBECA (Zona 24) — No Operativo"}, {"id": "plfyrgsn", "category": "panico", "label": "Local 2-3 - PSB DEL PORTAL (Zona 22-23) — No Operativo"}, {"id": "pke5uj0y", "category": "panico", "label": "Local 4, A - PSB SICLO (Zona 21) — No Operativo"}, {"id": "pt68ylf2", "category": "panico", "label": "Local 1C - PSB DINASTIA (Zona 8) — No Operativo"}, {"id": "ppgyjidd", "category": "panico", "label": "Local 4C - PSB RAMON CARNES AL CARBON (Zona 3) — No Operativo"}, {"id": "p795l548", "category": "panico", "label": "Local 13B - PSB EL DOBLEZ (Zona 35) — No Operativo"}, {"id": "pr78am85", "category": "panico", "label": "Local 8.2 - PSB KINDER CLUB (Zona 14) — No Operativo"}, {"id": "peqip4fb", "category": "panico", "label": "Local 1B - PSB VETERINARIA GUAYAQUIL (Zona 25) — No Operativo"}, {"id": "p1k6pdsy", "category": "panico", "label": "Local 17B - PSB PROTIN — No Operativo"}, {"id": "p7o2s8yf", "category": "panico", "label": "Local 2B - PSB LE BISTROT (Zona 26) — No Operativo"}, {"id": "pbhwtyrf", "category": "panico", "label": "Local 14 - PSB CASA ESTUDIO (Zona 15) — No Operativo"}, {"id": "ph5nnn3s", "category": "panico", "label": "Local 5B - PSB LA SELECTA (Zona 28) — No Operativo"}, {"id": "p006xvb1", "category": "panico", "label": "Local 6B - PSB RELOJERIA FQ (Zona 29) — No Operativo"}, {"id": "p8jqs7e0", "category": "panico", "label": "Local 7B - PSB CONSTRUENTORNO (Zona 32) — No Operativo"}]}, {"id": "p9lpq83v", "name": "Ciudad Celeste", "collapsed": false, "items": [{"id": "praggq01", "category": "camaras", "label": "DVR2 / Cam 12 — Sin imagen"}, {"id": "p474oxhs", "category": "panico", "label": "Local 62 - PCC PYCCA — No Operativo"}, {"id": "pgxlijpd", "category": "panico", "label": "Local 37-38 - PCC PEZ EXPRESS (Zona 7) — No Operativo"}, {"id": "p6cydvu3", "category": "panico", "label": "Local 59 - PCC FYBECA (Zona 4) — No Operativo"}, {"id": "pju79t3m", "category": "panico", "label": "Local 50 - PCC ESTACION GOURMET (Zona 27) — No Operativo"}, {"id": "p6h0auj9", "category": "panico", "label": "Local 31-32-33-34 - PCC CARNICERIA (Zona 2) — No Operativo"}, {"id": "pbd0713m", "category": "panico", "label": "Local 61C - 61D - PCC PET STATION (Zona 35) — No Operativo"}, {"id": "p7l9n3id", "category": "panico", "label": "Local 58 - PCC SAMBOLON — No Operativo"}, {"id": "p1m4lk64", "category": "panico", "label": "Local 60B - PCC DISENSA (Zona 1) — No Operativo"}, {"id": "p157x0lq", "category": "incendio", "label": "SCI APAGADO REVISAR / SE ACTIVA SOLO"}]}, {"id": "pa0hatcq", "name": "Murano", "collapsed": false, "items": [{"id": "p5tdlb94", "category": "camaras", "label": "NVR1 / Cam 38 — Sin imagen"}, {"id": "p07vt3f2", "category": "camaras", "label": "NVR1 / Cam 36 — Sin imagen"}, {"id": "pvp7swpa", "category": "camaras", "label": "NVR2 / Cam 48 — Sin imagen"}, {"id": "p1uw5h4t", "category": "camaras", "label": "NVR2 / Cam 49 — Sin imagen"}, {"id": "p3fljdpj", "category": "camaras", "label": "NVR2 / Cam 51 — Sin imagen"}, {"id": "p6fq51jb", "category": "camaras", "label": "NVR1 / Cam 39 — Sin imagen"}]}, {"id": "pn6zjsgu", "name": "Villa Club", "collapsed": false, "items": [{"id": "p4nawlam", "category": "camaras", "label": "DVR2 / Cam 12 — Sin imagen"}, {"id": "pl89ryd5", "category": "camaras", "label": "NVR1 / Cam 15 — Otro"}, {"id": "p2dcn8uc", "category": "camaras", "label": "NVR1 / Cam 16 — Otro"}, {"id": "p9n9mubf", "category": "camaras", "label": "DVR2 / Cam 2 — Otro"}, {"id": "plwcxdl4", "category": "camaras", "label": "DVR2 / Cam 1 — Sin imagen"}, {"id": "plxgg684", "category": "panico", "label": "Local 34 - PVC SABROSON (Zona 40) — No Operativo"}, {"id": "pqye8n4m", "category": "panico", "label": "Local 31 - PVC DOLCELATE — No Operativo"}, {"id": "p16r7vc9", "category": "panico", "label": "Local 20 D-E - PVC PAPA JHONS (Zona 26) — No Operativo"}, {"id": "pxsyjl7s", "category": "panico", "label": "Local 28 - PVC MALAK SHAWARMA (Zona 35) — No Operativo"}, {"id": "p5057kqu", "category": "panico", "label": "Local 10 - PVC PUNTO DE LA SUERTE (Zona 15) — No Operativo"}, {"id": "p89ew52b", "category": "panico", "label": "Local 8 - PVC DIPASO (Zona 13) — No Operativo"}, {"id": "pykjittn", "category": "panico", "label": "Local 12-13 - PVC SKANDALO (Zona 17) — No Operativo"}, {"id": "p8grly98", "category": "panico", "label": "Local 18 - PVC TORTAMANIA (Zona 23) — No Operativo"}, {"id": "pxi76tgz", "category": "panico", "label": "Local 19 - PVC DE UÑAS (Zona 24) — No Operativo"}, {"id": "p77vue27", "category": "panico", "label": "Local 20 B - PVC LOS ARBOLITOS — No Operativo"}, {"id": "p3gnwvx4", "category": "panico", "label": "Local 21 - PVC SAMBOLON (Zona 27) — No Operativo"}, {"id": "ppru7pgc", "category": "panico", "label": "Local 22 - PVC SAMBOLON (Zona 28) — No Operativo"}, {"id": "pvzd7oog", "category": "panico", "label": "Local 33 - PVC CARMITA (Zona 40) — No Operativo"}, {"id": "p0thpj72", "category": "panico", "label": "Local 35 - PVC GREEN BERRY (Zona 41) — No Operativo"}, {"id": "pgvn3s4q", "category": "panico", "label": "Local 36 - PVC NELSON HOUSE — No Operativo"}, {"id": "pi9hp08s", "category": "panico", "label": "Local 37 - PVC D LEÑA (Zona 42) — No Operativo"}, {"id": "pzfzmqx9", "category": "panico", "label": "Local 38 - PVC KG (Zona 43) — No Operativo"}, {"id": "pxmxt244", "category": "panico", "label": "Local 23 - PVC LABORATORIO ALCIVAR (Zona 29) — No Operativo"}, {"id": "pvr8ujx4", "category": "panico", "label": "Local 25 - PVC VETERINARIA (Zona 28) — No Operativo"}, {"id": "p4igifou", "category": "panico", "label": "Local 15 - PVC BEJARDENT (Zona 19) — No Operativo"}, {"id": "pw6sf589", "category": "panico", "label": "Local 16 - PVC EL ADORNO (Zona 22) — No Operativo"}, {"id": "p4986hm0", "category": "panico", "label": "Local 17 - PVC EL ADORNO (Zona 22) — No Operativo"}, {"id": "p1wt9d2p", "category": "panico", "label": "Local 20 A - PVC SUPER PACO (Zona 25) — No Operativo"}, {"id": "pp5lrtsl", "category": "panico", "label": "Local 3A-3B - PVC VIENESA (Zona 1) — No Operativo"}, {"id": "pg1s3zv3", "category": "panico", "label": "Local 1A - PVC FYBECA (Zona 2) — No Operativo"}]}, {"id": "p5h9oazc", "name": "FCG", "collapsed": false, "items": [{"id": "pkbbb44j", "category": "camaras", "label": "NVR1 / Cam 13 — Sin imagen"}, {"id": "pc7vorlx", "category": "camaras", "label": "NVR1 / Cam 12 — Sin imagen"}, {"id": "pyt9yomu", "category": "camaras", "label": "NVR1 / Cam 14 — Sin imagen"}, {"id": "pm2cejlh", "category": "camaras", "label": "NVR2 / Cam 6 — Sin imagen"}, {"id": "p62ff5yt", "category": "camaras", "label": "NVR2 / Cam 1 — Otro"}, {"id": "pe44he9o", "category": "camaras", "label": "NVR2 / Cam 5 — Otro"}, {"id": "pw12cfqy", "category": "panico", "label": "Local 5 - PFCG BARBERIA BARCABI (Zona 17) — No Operativo"}, {"id": "p5wu750n", "category": "panico", "label": "EDDY - Sin BP"}, {"id": "p9068t1q", "category": "panico", "label": "PUNTA DEL ESTE - Sin BP"}, {"id": "pq3ob9tm", "category": "panico", "label": "NATURISIMO - Sin BP"}, {"id": "pqdu2t2p", "category": "panico", "label": "GREEN FROST - Sin BP"}]}, {"id": "p8zs07is", "name": "La Joya", "collapsed": false, "items": [{"id": "p0xtcjgo", "category": "camaras", "label": "DVR2 / Cam 10 — Sin imagen"}, {"id": "pb4f4wdk", "category": "camaras", "label": "DVR2 / Cam 3 — Sin imagen"}, {"id": "puum6ns0", "category": "camaras", "label": "DVR2 / Cam 8 — Sin imagen"}, {"id": "p97z9d5u", "category": "camaras", "label": "DVR2 / Cam 13 — Sin imagen"}, {"id": "p3mohihx", "category": "panico", "label": "Local 14 - PLJ CALDERA DEL NEGRO (Zona 20) — No Operativo"}, {"id": "pdhmmj69", "category": "panico", "label": "Local 13 - PLJ LA CALDERA DEL NEGRO (Zona 21) — No Operativo"}, {"id": "pj74gn42", "category": "panico", "label": "Local 10 - PLJ BARBERIA (Zona 24) — No Operativo"}, {"id": "psd9vtez", "category": "panico", "label": "Local 3 - PLJ KIA (Zona 30) — No Operativo"}, {"id": "pzzjl784", "category": "panico", "label": "Local 6 - PLJ ELITE (Zona 27) — No Operativo"}]}, {"id": "pda6vs3r", "name": "Villas del Rey", "collapsed": false, "items": [{"id": "pvgpw7ev", "category": "camaras", "label": "NVR2 / Cam 13 — Sin imagen"}, {"id": "ps5exuy0", "category": "camaras", "label": "NVR2 / Cam 14 — Sin imagen"}, {"id": "p36bnhne", "category": "panico", "label": "Local 11 B - CALIFORNIA — No Operativo"}, {"id": "phzsdet4", "category": "panico", "label": "Local 7 - PATRICS MOROS Y ALITAS (Zona 5) — No Operativo"}, {"id": "p9e3r6zn", "category": "panico", "label": "Local 11 A - EMPANADICTOS (Zona 11) — No Operativo"}, {"id": "p87r3hn6", "category": "panico", "label": "Local 13 - EL DIVINO ENCEBOLLADO — No Operativo"}, {"id": "p0reyl0e", "category": "panico", "label": "Local 15 - DUNKIN DONUT (Zona 10) — No Operativo"}, {"id": "pj5zavv7", "category": "panico", "label": "Local 6 - D.BEBES (Zona 4) — No Operativo"}, {"id": "p92kizig", "category": "panico", "label": "Local 12 - POLLOS A LA BRASA TITAN (Zona 15) — No Operativo"}, {"id": "praxstx6", "category": "incendio", "label": "ESTACIÓN MANUAL INGRESO A BAÑOS - No operativa"}]}, {"id": "p7cn8cs6", "name": "Ceibos", "collapsed": false, "items": [{"id": "pv5l82re", "category": "camaras", "label": "DVR1 / Cam 12 — Sin imagen"}, {"id": "p34sihro", "category": "camaras", "label": "DVR2 / Cam 5 — Sin imagen"}, {"id": "pgn7s4gz", "category": "camaras", "label": "DVR1 / Cam 3 — Sin imagen"}, {"id": "pfwrimzm", "category": "panico", "label": "Local A15 - PCB PASTELERIA ADRIANA (Zona 11) — No Operativo"}, {"id": "pdt83axl", "category": "panico", "label": "Local A1 - PCB DELY GARDEN (Zona 24) — No Operativo"}, {"id": "p68s9ppu", "category": "panico", "label": "Local A5-6-7 - PCB PET STATION (Zona 19) — No Operativo"}, {"id": "pj8be8z1", "category": "panico", "label": "Local A4 - PCB GLAM ESTHETIC (Zona 21) — No Operativo"}, {"id": "png5pavg", "category": "panico", "label": "Local L1 - PCB COMPUTROM (Zona 40) — No Operativo"}, {"id": "pt29od23", "category": "panico", "label": "Local A2 - PCB FARMACIAS SUPER ECONOMICAS (Zona 23) — No Operativo"}, {"id": "pgn7i4ww", "category": "panico", "label": "Local A8-9 BAJA - PCB FARMAPLUS (Zona 18) — No Operativo"}, {"id": "pwbzchlq", "category": "panico", "label": "Local A19 - PCB GREEN FROST — No Operativo"}, {"id": "pehzy32o", "category": "panico", "label": "Local A20 - PCB MILA (Zona 39) — No Operativo"}, {"id": "ptzrucg6", "category": "panico", "label": "Local A22 - PCB EL BUEN BOCADO (Zona 37) — No Operativo"}, {"id": "pgivw7oi", "category": "panico", "label": "Local A3 - PCB FARMACIALIDADES (Zona 22) — No Operativo"}, {"id": "pd9egz50", "category": "panico", "label": "Local A34-35-36 - PCB HAPPY FISH (Zona 26) — No Operativo"}, {"id": "p8pfhvmk", "category": "panico", "label": "Local A23 - PCB DESOCUPADO (Zona 36) — No Operativo"}, {"id": "pczzxa42", "category": "otros", "label": "Ingresa el Sr. Fausto Villalba a verificar la red del cajero de las barreras el cual indica que la fibra es la que esta averiada — En proceso"}, {"id": "pgyqdrj1", "category": "panico", "label": "Local A23 DESOCUPADO (Zona 36) — No Operativo"}]}, {"id": "pdsm68i4", "name": "Bosques", "collapsed": false, "items": [{"id": "ppa0b0sc", "category": "camaras", "label": "NVR2 / Cam 1 — Sin imagen"}, {"id": "phautvh8", "category": "camaras", "label": "NVR2 / Cam 2 — Sin imagen"}, {"id": "pkrwo60o", "category": "camaras", "label": "NVR2 / Cam 3 — Sin imagen"}, {"id": "pxhry76d", "category": "camaras", "label": "NVR2 / Cam 5 — Sin imagen"}]}, {"id": "pup9vhxk", "name": "Belén del Norte", "collapsed": false, "items": [{"id": "pwii8phi", "category": "otros", "label": "MANTENIMIENTO DE LOS CAJETINES — En proceso"}, {"id": "pd7xudfs", "category": "otros", "label": "CHAPA DE PUERTA PEATONAL DE SALIDA"}, {"id": "pb1sel6l", "category": "otros", "label": "CERCO ELECTRICO TERCERA ETAPA — Requiere seguimiento"}, {"id": "prse29ar", "category": "otros", "label": "12H10 Guardia líder informa que ingresa el Sr. Wilmer Luque C.I 0916893837, se moviliza en un vehiculo Marca: Chevrolet, Color: Plateado, Sin Placas, el cual procede a dar mantenimiento al cerco eléctrico de garita y del centro de acopio, el cerco eléctrico esta desactivado indico el Sr. Luque que mañana retorna a culminar con el trabajo, se retira 14H28 ya tiene conocimiento el Sr. Ricardo Bohórquez. — En proceso"}, {"id": "pbje2ps9", "category": "otros", "label": "Cubrir cableado puerta peatonal ingreso, el cual está expuesto — En proceso"}, {"id": "pthxbe6o", "category": "otros", "label": "14H00 Guardia lider Javier Parra informa que la linea 4 de cercado electrico desde la Mz2386 V1 hasta la V5 se encuentra suelta. Fausto Villalba indico que ya se acerca al punto — En proceso"}, {"id": "ple35cen", "category": "otros", "label": "Revisar el cajetín que se encuentra a lado del centro de acopio el cual no está funconando — En proceso"}, {"id": "p22jy0vo", "category": "otros", "label": "CERCO 3ERA ETAPA SE ACTIVA SOLO"}]}, {"id": "p53nn0br", "name": "Curía", "collapsed": false, "items": [{"id": "p0lqtqn5", "category": "camaras", "label": "DVR1 / Cam 4 — Intermitencia"}, {"id": "p0h6mcbk", "category": "camaras", "label": "DVR1 / Cam 10 — Intermitencia"}, {"id": "pcl8p4o2", "category": "camaras", "label": "DVR1 / Cam 2 — Intermitencia"}]}, {"id": "po8r3khd", "name": "Palmar", "collapsed": false, "items": [{"id": "poo2be5d", "category": "camaras", "label": "DVR1 / Cam 3 — Sin imagen"}]}], "cells": {"pwii8phi__2026-09-01": {"status": "en-proceso", "note": "REALIZARON MANTENIMIENTO DE LOS CAJETINES DEL CENTRO DE ACOPIO DE LA GARITA Y DEL CENTRO DE ACOPIO. INDICARON QUE QUEDO OPERATIVO EL CAJETIN DEL CENTRO DE ACOPIO Y MAÑANA REGRESAN A CONTINUAR CON EL MANTENIMIENTO DEL CAJETIN DE LA GARITA."}, "pd7xudfs__2026-09-01": {"status": "pendiente", "note": "LA CHAPA DE LA PUERTA PEATONAL DE SALIDA SE ESTA DESOLDANDO Y SE TRABA AL MOMENTO DE ABRIRLA, EL SR.FAUSTO VILLALVA INDICO QUE MAÑANA SE ACERCARIA CON LA MAQUINA DE SOLDAR PARA DARLE SOLUCION."}, "pb1sel6l__2026-09-01": {"status": "pendiente", "note": "MANTENIMIENTO AL CERCO ELECTRICO DE LA TERCERA ETAPA, EL GUARDIA INDICA QUE AUN NO ESTA OPERATIVO"}, "prse29ar__2026-09-01": {"status": "en-proceso", "note": "Mañana regresa a terminar el trabajo."}, "pbje2ps9__2026-09-01": {"status": "en-proceso", "note": ""}, "pthxbe6o__2026-09-01": {"status": "en-proceso", "note": ""}, "ple35cen__2026-09-01": {"status": "en-proceso", "note": ""}, "ppa0b0sc__2026-09-01": {"status": "pendiente", "note": "Fausto indica que el cable de acometida de la antena está pelado y picado."}, "phautvh8__2026-09-01": {"status": "pendiente", "note": "Fausto indica que el cable de acometida de la antena está pelado y picado."}, "pkrwo60o__2026-09-01": {"status": "pendiente", "note": "Fausto indica que el cable de acometida de la antena está pelado y picado."}, "pxhry76d__2026-09-01": {"status": "pendiente", "note": "Fausto indica que el cable de acometida de la antena está pelado y picado."}, "pv5l82re__2026-09-01": {"status": "pendiente", "note": ""}, "p34sihro__2026-09-01": {"status": "pendiente", "note": "FAUSTO AUN NO REVISA"}, "pgn7s4gz__2026-09-01": {"status": "pendiente", "note": "Fausto no ha revisado"}, "pfwrimzm__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL, PERO SI SE ENCENDIO EL FOQUITO DEL BOTON DE PANICO"}, "pdt83axl__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No le vale la Pila del BP"}, "p68s9ppu__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llego Señal"}, "pj8be8z1__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): La pila del BP no funciona"}, "png5pavg__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): INDICAN QUE NO TIENEN BOTON DE PANICO"}, "pt29od23__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): El Sr. Jean Carlos Sánchez indica que el local no tiene botón."}, "pgn7i4ww__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No tiene botón."}, "pwbzchlq__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (Otro): No tiene botón de pánico."}, "pehzy32o__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): El Sr. Banchon de mantenimiento indica que el local no tiene BP"}, "ptzrucg6__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): El Sr. Banchon de movimiento indico que no llega la sañal"}, "pgivw7oi__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): El Sr. Jean Carlos Sanchez indica que no llega la señal."}, "pd9egz50__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL BP"}, "p8pfhvmk__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL BP"}, "pczzxa42__2026-09-01": {"status": "en-proceso", "note": ""}, "praggq01__2026-09-01": {"status": "pendiente", "note": "Sin imagen desde el dia 25 de Agosto"}, "p474oxhs__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL DE BP"}, "pgxlijpd__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): boton dañado"}, "p6cydvu3__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llego el BP"}, "pju79t3m__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LE VALE EL BOTON"}, "p6h0auj9__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO TIENE BOTON DE PANICO"}, "pbd0713m__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p7l9n3id__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p1m4lk64__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p0lqtqn5__2026-09-01": {"status": "pendiente", "note": "DEJÓ LA CAMARA CON IMAGEN, PERO LUEGO DE UNOS MINUTOS COMENZÓ A ESTAR INTERMITENTE, SEGÚN PORQUE LA FIBRA ESTÁ FALLANDO"}, "p0h6mcbk__2026-09-01": {"status": "pendiente", "note": "DEJÓ LA CAMARA CON IMAGEN, PERO LUEGO DE UNOS MINUTOS COMENZÓ A ESTAR INTERMITENTE, SEGÚN PORQUE LA FIBRA ESTÁ FALLANDO"}, "pcl8p4o2__2026-09-01": {"status": "pendiente", "note": "DEJÓ LA CAMARA CON IMAGEN, PERO LUEGO DE UNOS MINUTOS COMENZÓ A ESTAR INTERMITENTE, SEGÚN PORQUE LA FIBRA ESTÁ FALLANDO"}, "pkbbb44j__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA"}, "pc7vorlx__2026-09-01": {"status": "pendiente", "note": "EL TECNICO AUN NO REVISA"}, "pyt9yomu__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA"}, "pm2cejlh__2026-09-01": {"status": "pendiente", "note": "FAUSTO AUN NO REVISA"}, "p62ff5yt__2026-09-01": {"status": "pendiente", "note": "Fernando Vera desmontó la cámara ya que el tubo metálico donde estaba instalada la cámara se dañó. Fausto aún no instala el nuevo tubo."}, "pe44he9o__2026-09-01": {"status": "pendiente", "note": "Fausto desinstaló la cámara ya que estaba averiada y aún no la cambia"}, "pw12cfqy__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL, PERO SI SE ENCENDIO EL FOQUITO DEL BOTON DE PANICO"}, "p0xtcjgo__2026-09-01": {"status": "pendiente", "note": "EL SR. FAUSTO VILLALVA AUN NO REVISA"}, "pb4f4wdk__2026-09-01": {"status": "pendiente", "note": ""}, "puum6ns0__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA"}, "p97z9d5u__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA"}, "p3mohihx__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): boton no tiene pila"}, "pdhmmj69__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): boton no tiene pila"}, "pj74gn42__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): Indico el Sr. Eduardo Figueroa que hizo la prueba que se le a perdido el BP"}, "psd9vtez__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL DEL BOTON DE PANICO"}, "pzzjl784__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL DEL BOTON DE PANICO"}, "p5tdlb94__2026-09-01": {"status": "pendiente", "note": "El técnico Fausto Villalva aun no revisa"}, "p07vt3f2__2026-09-01": {"status": "pendiente", "note": "EL SR. FAUSTO VILLALVA AUN NO REVISA, LA CAMARA SE QUEDA SIN IMAGEN POR LAPSOS"}, "pvp7swpa__2026-09-01": {"status": "pendiente", "note": "Fausto aun no revisa"}, "p1uw5h4t__2026-09-01": {"status": "pendiente", "note": "Fausto aun no revisa"}, "p3fljdpj__2026-09-01": {"status": "pendiente", "note": "Fausto aun no revisa"}, "p6fq51jb__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA."}, "poo2be5d__2026-09-01": {"status": "pendiente", "note": "EL SR. FAUSTO VILLALVA INDICA QUE LA CAMARA ESTA QUEMADA"}, "p4zqmusm__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGA LA SEÑAL DE BP."}, "p9jvq7ub__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "pz3i414n__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p75dh2t1__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL, PERO SI SE ENCENDIO EL FOQUITO DEL BOTON DE PANICO"}, "pzvle7ic__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL, PERO SI SE ENCENDIO EL FOQUITO DEL BOTON DE PANICO"}, "pqspsoeb__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL, PERO SI SE ENCENDIO EL FOQUITO DEL BOTON DE PANICO"}, "pylwnrm0__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO TIENE BP"}, "plfyrgsn__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO TIENE BP"}, "pke5uj0y__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO TIENE BP"}, "pt68ylf2__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL BP"}, "ppgyjidd__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL DE BP"}, "p795l548__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): Indico mantenimiento que no llega"}, "pr78am85__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "peqip4fb__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p1k6pdsy__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p7o2s8yf__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "pbhwtyrf__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO TIENE BP"}, "ph5nnn3s__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p006xvb1__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p8jqs7e0__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p4nawlam__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA."}, "pl89ryd5__2026-09-01": {"status": "pendiente", "note": "En lapsos no graba la cámara. Se le ha mencionado a Fausto y ha indicado que es la antena, pero no ha solucionado. La cámara no esta grabando desde el 17 de julio."}, "p2dcn8uc__2026-09-01": {"status": "pendiente", "note": "En lapsos no graba la cámara. Se le ha mencionado a Fausto y ha indicado que es la antena, pero no ha solucionado. La cámara no esta grabando desde el 17 de julio."}, "p9n9mubf__2026-09-01": {"status": "pendiente", "note": "La cámara en las noches se pone opaca, se le ha mencionado a Fausto pero no la ha revisado"}, "plwcxdl4__2026-09-01": {"status": "pendiente", "note": "Fausto mencionó que el cableado de red está dañado, aún no lo cambia"}, "plxgg684__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): INDICO QUE NO TIENE BP"}, "pqye8n4m__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): INDICO QUE NO TIENE BP"}, "p16r7vc9__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL, PERO SI SE ENCENDIO EL FOQUITO DEL BOTON DE PANICO"}, "pxsyjl7s__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (Otro): INDICAN QUE AUN NO LES DEVUELVEN EL BOTON DE PANICO"}, "p5057kqu__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO TIENE BOTON."}, "p89ew52b__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): Batería agotada"}, "pykjittn__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): Baterá agotada"}, "p8grly98__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): no tiene boton"}, "pxi76tgz__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): no tiene boton"}, "p77vue27__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): no tiene boton"}, "p3gnwvx4__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó la señal"}, "ppru7pgc__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó"}, "pvzd7oog__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó señal"}, "p0thpj72__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó la señal"}, "pgvn3s4q__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llega la señal"}, "pi9hp08s__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llega la señal"}, "pzfzmqx9__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó la señal"}, "pxmxt244__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó la señal"}, "pvr8ujx4__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó la señal"}, "p4igifou__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): No llegó"}, "pw6sf589__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): Bateria agotada"}, "p4986hm0__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): Batería agotada"}, "p1wt9d2p__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (Otro): No encontraron el botón"}, "pp5lrtsl__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): INDICARON QUE NO ENCUENTRAN EL BOTON DE PANICO"}, "pg1s3zv3__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA SEÑAL, PERO SI SE ENCENDIO EL FOCO DEL BOTON DE PANICO"}, "pvgpw7ev__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA"}, "ps5exuy0__2026-09-01": {"status": "pendiente", "note": "FAUSTO VILLALVA AUN NO REVISA"}, "p36bnhne__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO TIENE BP"}, "phzsdet4__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LAS SEÑAL"}, "p9e3r6zn__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p87r3hn6__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p0reyl0e__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "pj5zavv7__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO LA ALARMA BP"}, "p92kizig__2026-09-01": {"status": "pendiente", "note": "Generado automáticamente según la prueba semanal (No llegó): NO LLEGO BP"}, "p5tdlb94__2026-09-03": {"status": "pendiente", "note": ""}, "p5tdlb94__2026-09-04": {"status": "pendiente", "note": ""}, "p5tdlb94__2026-09-05": {"status": "pendiente", "note": ""}, "p07vt3f2__2026-09-03": {"status": "pendiente", "note": ""}, "p07vt3f2__2026-09-04": {"status": "pendiente", "note": ""}, "p07vt3f2__2026-09-05": {"status": "pendiente", "note": ""}, "pvp7swpa__2026-09-03": {"status": "pendiente", "note": ""}, "pvp7swpa__2026-09-04": {"status": "pendiente", "note": ""}, "pvp7swpa__2026-09-05": {"status": "pendiente", "note": ""}, "p1uw5h4t__2026-09-03": {"status": "pendiente", "note": ""}, "p1uw5h4t__2026-09-04": {"status": "pendiente", "note": ""}, "p1uw5h4t__2026-09-05": {"status": "pendiente", "note": ""}, "p3fljdpj__2026-09-03": {"status": "pendiente", "note": ""}, "p3fljdpj__2026-09-04": {"status": "pendiente", "note": ""}, "p3fljdpj__2026-09-05": {"status": "pendiente", "note": ""}, "p6fq51jb__2026-09-03": {"status": "pendiente", "note": ""}, "p6fq51jb__2026-09-04": {"status": "pendiente", "note": ""}, "p6fq51jb__2026-09-05": {"status": "pendiente", "note": ""}, "p157x0lq__2026-09-04": {"status": "pendiente", "note": ""}, "p157x0lq__2026-09-05": {"status": "pendiente", "note": ""}, "p22jy0vo__2026-09-07": {"status": "pendiente", "note": ""}, "p22jy0vo__2026-09-09": {"status": "pendiente", "note": ""}, "praggq01__2026-09-09": {"status": "pendiente", "note": ""}, "p474oxhs__2026-09-09": {"status": "pendiente", "note": ""}, "p474oxhs__2026-09-11": {"status": "pendiente", "note": ""}, "p474oxhs__2026-09-12": {"status": "pendiente", "note": ""}, "p474oxhs__2026-09-13": {"status": "pendiente", "note": ""}, "p474oxhs__2026-09-15": {"status": "pendiente", "note": ""}, "pgxlijpd__2026-09-09": {"status": "pendiente", "note": ""}, "pgxlijpd__2026-09-11": {"status": "pendiente", "note": ""}, "pgxlijpd__2026-09-12": {"status": "pendiente", "note": ""}, "pgxlijpd__2026-09-13": {"status": "pendiente", "note": ""}, "pgxlijpd__2026-09-15": {"status": "pendiente", "note": ""}, "p6cydvu3__2026-09-09": {"status": "pendiente", "note": ""}, "p6cydvu3__2026-09-11": {"status": "pendiente", "note": ""}, "p6cydvu3__2026-09-12": {"status": "pendiente", "note": ""}, "p6cydvu3__2026-09-13": {"status": "pendiente", "note": ""}, "p6cydvu3__2026-09-15": {"status": "pendiente", "note": ""}, "pju79t3m__2026-09-09": {"status": "pendiente", "note": ""}, "pju79t3m__2026-09-11": {"status": "pendiente", "note": ""}, "pju79t3m__2026-09-12": {"status": "pendiente", "note": ""}, "pju79t3m__2026-09-13": {"status": "pendiente", "note": ""}, "pju79t3m__2026-09-15": {"status": "pendiente", "note": ""}, "p6h0auj9__2026-09-09": {"status": "pendiente", "note": ""}, "p6h0auj9__2026-09-11": {"status": "pendiente", "note": ""}, "p6h0auj9__2026-09-12": {"status": "pendiente", "note": ""}, "p6h0auj9__2026-09-13": {"status": "pendiente", "note": ""}, "p6h0auj9__2026-09-15": {"status": "pendiente", "note": ""}, "pbd0713m__2026-09-09": {"status": "pendiente", "note": ""}, "pbd0713m__2026-09-11": {"status": "pendiente", "note": ""}, "pbd0713m__2026-09-12": {"status": "pendiente", "note": ""}, "pbd0713m__2026-09-13": {"status": "pendiente", "note": ""}, "pbd0713m__2026-09-15": {"status": "pendiente", "note": ""}, "p7l9n3id__2026-09-09": {"status": "pendiente", "note": ""}, "p7l9n3id__2026-09-11": {"status": "pendiente", "note": ""}, "p7l9n3id__2026-09-12": {"status": "pendiente", "note": ""}, "p7l9n3id__2026-09-13": {"status": "pendiente", "note": ""}, "p7l9n3id__2026-09-15": {"status": "pendiente", "note": ""}, "p1m4lk64__2026-09-09": {"status": "pendiente", "note": ""}, "p1m4lk64__2026-09-11": {"status": "pendiente", "note": ""}, "p1m4lk64__2026-09-12": {"status": "pendiente", "note": ""}, "p1m4lk64__2026-09-13": {"status": "pendiente", "note": ""}, "p1m4lk64__2026-09-15": {"status": "pendiente", "note": ""}, "ppa0b0sc__2026-09-11": {"status": "pendiente", "note": ""}, "ppa0b0sc__2026-09-12": {"status": "pendiente", "note": ""}, "ppa0b0sc__2026-09-13": {"status": "pendiente", "note": ""}, "phautvh8__2026-09-11": {"status": "pendiente", "note": ""}, "phautvh8__2026-09-12": {"status": "pendiente", "note": ""}, "phautvh8__2026-09-13": {"status": "pendiente", "note": ""}, "pkrwo60o__2026-09-11": {"status": "pendiente", "note": ""}, "pkrwo60o__2026-09-12": {"status": "pendiente", "note": ""}, "pkrwo60o__2026-09-13": {"status": "pendiente", "note": ""}, "pxhry76d__2026-09-11": {"status": "pendiente", "note": ""}, "pxhry76d__2026-09-12": {"status": "pendiente", "note": ""}, "pxhry76d__2026-09-13": {"status": "pendiente", "note": ""}, "poo2be5d__2026-09-15": {"status": "pendiente", "note": ""}, "p4nawlam__2026-09-19": {"status": "pendiente", "note": ""}, "p4nawlam__2026-09-20": {"status": "pendiente", "note": ""}, "p4nawlam__2026-09-21": {"status": "pendiente", "note": ""}, "p4nawlam__2026-09-23": {"status": "pendiente", "note": ""}, "p4nawlam__2026-09-24": {"status": "pendiente", "note": ""}, "pl89ryd5__2026-09-19": {"status": "pendiente", "note": ""}, "pl89ryd5__2026-09-20": {"status": "pendiente", "note": ""}, "pl89ryd5__2026-09-21": {"status": "pendiente", "note": ""}, "pl89ryd5__2026-09-23": {"status": "pendiente", "note": ""}, "pl89ryd5__2026-09-24": {"status": "pendiente", "note": ""}, "p2dcn8uc__2026-09-19": {"status": "pendiente", "note": ""}, "p2dcn8uc__2026-09-20": {"status": "pendiente", "note": ""}, "p2dcn8uc__2026-09-21": {"status": "pendiente", "note": ""}, "p2dcn8uc__2026-09-23": {"status": "pendiente", "note": ""}, "p2dcn8uc__2026-09-24": {"status": "pendiente", "note": ""}, "p9n9mubf__2026-09-19": {"status": "pendiente", "note": ""}, "p9n9mubf__2026-09-20": {"status": "pendiente", "note": ""}, "p9n9mubf__2026-09-21": {"status": "pendiente", "note": ""}, "p9n9mubf__2026-09-23": {"status": "pendiente", "note": ""}, "p9n9mubf__2026-09-24": {"status": "pendiente", "note": ""}, "plwcxdl4__2026-09-19": {"status": "pendiente", "note": ""}, "plwcxdl4__2026-09-20": {"status": "pendiente", "note": ""}, "plwcxdl4__2026-09-21": {"status": "pendiente", "note": ""}, "plwcxdl4__2026-09-23": {"status": "pendiente", "note": ""}, "plwcxdl4__2026-09-24": {"status": "pendiente", "note": ""}, "plxgg684__2026-09-19": {"status": "pendiente", "note": ""}, "plxgg684__2026-09-20": {"status": "pendiente", "note": ""}, "plxgg684__2026-09-21": {"status": "pendiente", "note": ""}, "plxgg684__2026-09-23": {"status": "pendiente", "note": ""}, "plxgg684__2026-09-24": {"status": "pendiente", "note": ""}, "pqye8n4m__2026-09-19": {"status": "pendiente", "note": ""}, "pqye8n4m__2026-09-20": {"status": "pendiente", "note": ""}, "pqye8n4m__2026-09-21": {"status": "pendiente", "note": ""}, "pqye8n4m__2026-09-23": {"status": "pendiente", "note": ""}, "pqye8n4m__2026-09-24": {"status": "pendiente", "note": ""}, "p16r7vc9__2026-09-19": {"status": "pendiente", "note": ""}, "p16r7vc9__2026-09-20": {"status": "pendiente", "note": ""}, "p16r7vc9__2026-09-21": {"status": "pendiente", "note": ""}, "p16r7vc9__2026-09-23": {"status": "pendiente", "note": ""}, "p16r7vc9__2026-09-24": {"status": "pendiente", "note": ""}, "pxsyjl7s__2026-09-19": {"status": "pendiente", "note": ""}, "pxsyjl7s__2026-09-20": {"status": "pendiente", "note": ""}, "pxsyjl7s__2026-09-21": {"status": "pendiente", "note": ""}, "pxsyjl7s__2026-09-23": {"status": "pendiente", "note": ""}, "pxsyjl7s__2026-09-24": {"status": "pendiente", "note": ""}, "p5057kqu__2026-09-19": {"status": "pendiente", "note": ""}, "p5057kqu__2026-09-20": {"status": "pendiente", "note": ""}, "p5057kqu__2026-09-21": {"status": "pendiente", "note": ""}, "p5057kqu__2026-09-23": {"status": "pendiente", "note": ""}, "p5057kqu__2026-09-24": {"status": "pendiente", "note": ""}, "p89ew52b__2026-09-19": {"status": "pendiente", "note": ""}, "p89ew52b__2026-09-20": {"status": "pendiente", "note": ""}, "p89ew52b__2026-09-21": {"status": "pendiente", "note": ""}, "p89ew52b__2026-09-23": {"status": "pendiente", "note": ""}, "p89ew52b__2026-09-24": {"status": "pendiente", "note": ""}, "pykjittn__2026-09-19": {"status": "pendiente", "note": ""}, "pykjittn__2026-09-20": {"status": "pendiente", "note": ""}, "pykjittn__2026-09-21": {"status": "pendiente", "note": ""}, "pykjittn__2026-09-23": {"status": "pendiente", "note": ""}, "pykjittn__2026-09-24": {"status": "pendiente", "note": ""}, "p8grly98__2026-09-19": {"status": "pendiente", "note": ""}, "p8grly98__2026-09-20": {"status": "pendiente", "note": ""}, "p8grly98__2026-09-21": {"status": "pendiente", "note": ""}, "p8grly98__2026-09-23": {"status": "pendiente", "note": ""}, "p8grly98__2026-09-24": {"status": "pendiente", "note": ""}, "pxi76tgz__2026-09-19": {"status": "pendiente", "note": ""}, "pxi76tgz__2026-09-20": {"status": "pendiente", "note": ""}, "pxi76tgz__2026-09-21": {"status": "pendiente", "note": ""}, "pxi76tgz__2026-09-23": {"status": "pendiente", "note": ""}, "pxi76tgz__2026-09-24": {"status": "pendiente", "note": ""}, "p77vue27__2026-09-19": {"status": "pendiente", "note": ""}, "p77vue27__2026-09-20": {"status": "pendiente", "note": ""}, "p77vue27__2026-09-21": {"status": "pendiente", "note": ""}, "p77vue27__2026-09-23": {"status": "pendiente", "note": ""}, "p77vue27__2026-09-24": {"status": "pendiente", "note": ""}, "p3gnwvx4__2026-09-19": {"status": "pendiente", "note": ""}, "p3gnwvx4__2026-09-20": {"status": "pendiente", "note": ""}, "p3gnwvx4__2026-09-21": {"status": "pendiente", "note": ""}, "p3gnwvx4__2026-09-23": {"status": "pendiente", "note": ""}, "p3gnwvx4__2026-09-24": {"status": "pendiente", "note": ""}, "ppru7pgc__2026-09-19": {"status": "pendiente", "note": ""}, "ppru7pgc__2026-09-20": {"status": "pendiente", "note": ""}, "ppru7pgc__2026-09-21": {"status": "pendiente", "note": ""}, "ppru7pgc__2026-09-23": {"status": "pendiente", "note": ""}, "ppru7pgc__2026-09-24": {"status": "pendiente", "note": ""}, "pvzd7oog__2026-09-19": {"status": "pendiente", "note": ""}, "pvzd7oog__2026-09-20": {"status": "pendiente", "note": ""}, "pvzd7oog__2026-09-21": {"status": "pendiente", "note": ""}, "pvzd7oog__2026-09-23": {"status": "pendiente", "note": ""}, "pvzd7oog__2026-09-24": {"status": "pendiente", "note": ""}, "p0thpj72__2026-09-19": {"status": "pendiente", "note": ""}, "p0thpj72__2026-09-20": {"status": "pendiente", "note": ""}, "p0thpj72__2026-09-21": {"status": "pendiente", "note": ""}, "p0thpj72__2026-09-23": {"status": "pendiente", "note": ""}, "p0thpj72__2026-09-24": {"status": "pendiente", "note": ""}, "pgvn3s4q__2026-09-19": {"status": "pendiente", "note": ""}, "pgvn3s4q__2026-09-20": {"status": "pendiente", "note": ""}, "pgvn3s4q__2026-09-21": {"status": "pendiente", "note": ""}, "pgvn3s4q__2026-09-23": {"status": "pendiente", "note": ""}, "pgvn3s4q__2026-09-24": {"status": "pendiente", "note": ""}, "pi9hp08s__2026-09-19": {"status": "pendiente", "note": ""}, "pi9hp08s__2026-09-20": {"status": "pendiente", "note": ""}, "pi9hp08s__2026-09-21": {"status": "pendiente", "note": ""}, "pi9hp08s__2026-09-23": {"status": "pendiente", "note": ""}, "pi9hp08s__2026-09-24": {"status": "pendiente", "note": ""}, "pzfzmqx9__2026-09-19": {"status": "pendiente", "note": ""}, "pzfzmqx9__2026-09-20": {"status": "pendiente", "note": ""}, "pzfzmqx9__2026-09-21": {"status": "pendiente", "note": ""}, "pzfzmqx9__2026-09-23": {"status": "pendiente", "note": ""}, "pzfzmqx9__2026-09-24": {"status": "pendiente", "note": ""}, "pxmxt244__2026-09-19": {"status": "pendiente", "note": ""}, "pxmxt244__2026-09-20": {"status": "pendiente", "note": ""}, "pxmxt244__2026-09-21": {"status": "pendiente", "note": ""}, "pxmxt244__2026-09-23": {"status": "pendiente", "note": ""}, "pxmxt244__2026-09-24": {"status": "pendiente", "note": ""}, "pvr8ujx4__2026-09-19": {"status": "pendiente", "note": ""}, "pvr8ujx4__2026-09-20": {"status": "pendiente", "note": ""}, "pvr8ujx4__2026-09-21": {"status": "pendiente", "note": ""}, "pvr8ujx4__2026-09-23": {"status": "pendiente", "note": ""}, "pvr8ujx4__2026-09-24": {"status": "pendiente", "note": ""}, "p4igifou__2026-09-19": {"status": "pendiente", "note": ""}, "p4igifou__2026-09-20": {"status": "pendiente", "note": ""}, "p4igifou__2026-09-21": {"status": "pendiente", "note": ""}, "p4igifou__2026-09-23": {"status": "pendiente", "note": ""}, "p4igifou__2026-09-24": {"status": "pendiente", "note": ""}, "pw6sf589__2026-09-19": {"status": "pendiente", "note": ""}, "pw6sf589__2026-09-20": {"status": "pendiente", "note": ""}, "pw6sf589__2026-09-21": {"status": "pendiente", "note": ""}, "pw6sf589__2026-09-23": {"status": "pendiente", "note": ""}, "pw6sf589__2026-09-24": {"status": "pendiente", "note": ""}, "p4986hm0__2026-09-19": {"status": "pendiente", "note": ""}, "p4986hm0__2026-09-20": {"status": "pendiente", "note": ""}, "p4986hm0__2026-09-21": {"status": "pendiente", "note": ""}, "p4986hm0__2026-09-23": {"status": "pendiente", "note": ""}, "p4986hm0__2026-09-24": {"status": "pendiente", "note": ""}, "p1wt9d2p__2026-09-19": {"status": "pendiente", "note": ""}, "p1wt9d2p__2026-09-20": {"status": "pendiente", "note": ""}, "p1wt9d2p__2026-09-21": {"status": "pendiente", "note": ""}, "p1wt9d2p__2026-09-23": {"status": "pendiente", "note": ""}, "p1wt9d2p__2026-09-24": {"status": "pendiente", "note": ""}, "pp5lrtsl__2026-09-19": {"status": "pendiente", "note": ""}, "pp5lrtsl__2026-09-20": {"status": "pendiente", "note": ""}, "pp5lrtsl__2026-09-21": {"status": "pendiente", "note": ""}, "pp5lrtsl__2026-09-23": {"status": "pendiente", "note": ""}, "pp5lrtsl__2026-09-24": {"status": "pendiente", "note": ""}, "pg1s3zv3__2026-09-19": {"status": "pendiente", "note": ""}, "pg1s3zv3__2026-09-20": {"status": "pendiente", "note": ""}, "pg1s3zv3__2026-09-21": {"status": "pendiente", "note": ""}, "pg1s3zv3__2026-09-23": {"status": "pendiente", "note": ""}, "pg1s3zv3__2026-09-24": {"status": "pendiente", "note": ""}, "pvgpw7ev__2026-10-01": {"status": "pendiente", "note": ""}, "pvgpw7ev__2026-10-03": {"status": "pendiente", "note": ""}, "ps5exuy0__2026-10-01": {"status": "pendiente", "note": ""}, "ps5exuy0__2026-10-03": {"status": "pendiente", "note": ""}, "p36bnhne__2026-10-01": {"status": "pendiente", "note": ""}, "p36bnhne__2026-10-03": {"status": "pendiente", "note": ""}, "phzsdet4__2026-10-01": {"status": "pendiente", "note": ""}, "phzsdet4__2026-10-03": {"status": "pendiente", "note": ""}, "p9e3r6zn__2026-10-01": {"status": "pendiente", "note": ""}, "p9e3r6zn__2026-10-03": {"status": "pendiente", "note": ""}, "p87r3hn6__2026-10-01": {"status": "pendiente", "note": ""}, "p87r3hn6__2026-10-03": {"status": "pendiente", "note": ""}, "p0reyl0e__2026-10-01": {"status": "pendiente", "note": ""}, "p0reyl0e__2026-10-03": {"status": "pendiente", "note": ""}, "pj5zavv7__2026-10-01": {"status": "pendiente", "note": ""}, "pj5zavv7__2026-10-03": {"status": "pendiente", "note": ""}, "p92kizig__2026-10-01": {"status": "pendiente", "note": ""}, "p92kizig__2026-10-03": {"status": "pendiente", "note": ""}, "praxstx6__2026-10-01": {"status": "pendiente", "note": ""}, "praxstx6__2026-10-03": {"status": "pendiente", "note": ""}, "p4zqmusm__2026-10-07": {"status": "pendiente", "note": ""}, "p4zqmusm__2026-10-08": {"status": "pendiente", "note": ""}, "p4zqmusm__2026-10-09": {"status": "pendiente", "note": ""}, "p4zqmusm__2026-10-11": {"status": "pendiente", "note": ""}, "p4zqmusm__2026-10-12": {"status": "pendiente", "note": ""}, "pt68ylf2__2026-10-07": {"status": "pendiente", "note": ""}, "pt68ylf2__2026-10-08": {"status": "pendiente", "note": ""}, "pt68ylf2__2026-10-09": {"status": "pendiente", "note": ""}, "pt68ylf2__2026-10-11": {"status": "pendiente", "note": ""}, "pt68ylf2__2026-10-12": {"status": "pendiente", "note": ""}, "p9jvq7ub__2026-10-07": {"status": "pendiente", "note": ""}, "p9jvq7ub__2026-10-08": {"status": "pendiente", "note": ""}, "p9jvq7ub__2026-10-09": {"status": "pendiente", "note": ""}, "p9jvq7ub__2026-10-11": {"status": "pendiente", "note": ""}, "p9jvq7ub__2026-10-12": {"status": "pendiente", "note": ""}, "pz3i414n__2026-10-07": {"status": "pendiente", "note": ""}, "pz3i414n__2026-10-08": {"status": "pendiente", "note": ""}, "pz3i414n__2026-10-09": {"status": "pendiente", "note": ""}, "pz3i414n__2026-10-11": {"status": "pendiente", "note": ""}, "pz3i414n__2026-10-12": {"status": "pendiente", "note": ""}, "p75dh2t1__2026-10-07": {"status": "pendiente", "note": ""}, "p75dh2t1__2026-10-08": {"status": "pendiente", "note": ""}, "p75dh2t1__2026-10-09": {"status": "pendiente", "note": ""}, "p75dh2t1__2026-10-11": {"status": "pendiente", "note": ""}, "p75dh2t1__2026-10-12": {"status": "pendiente", "note": ""}, "pzvle7ic__2026-10-07": {"status": "pendiente", "note": ""}, "pzvle7ic__2026-10-08": {"status": "pendiente", "note": ""}, "pzvle7ic__2026-10-09": {"status": "pendiente", "note": ""}, "pzvle7ic__2026-10-11": {"status": "pendiente", "note": ""}, "pzvle7ic__2026-10-12": {"status": "pendiente", "note": ""}, "pqspsoeb__2026-10-07": {"status": "pendiente", "note": ""}, "pqspsoeb__2026-10-08": {"status": "pendiente", "note": ""}, "pqspsoeb__2026-10-09": {"status": "pendiente", "note": ""}, "pqspsoeb__2026-10-11": {"status": "pendiente", "note": ""}, "pqspsoeb__2026-10-12": {"status": "pendiente", "note": ""}, "pylwnrm0__2026-10-07": {"status": "pendiente", "note": ""}, "pylwnrm0__2026-10-08": {"status": "pendiente", "note": ""}, "pylwnrm0__2026-10-09": {"status": "pendiente", "note": ""}, "pylwnrm0__2026-10-11": {"status": "pendiente", "note": ""}, "pylwnrm0__2026-10-12": {"status": "pendiente", "note": ""}, "plfyrgsn__2026-10-07": {"status": "pendiente", "note": ""}, "plfyrgsn__2026-10-08": {"status": "pendiente", "note": ""}, "plfyrgsn__2026-10-09": {"status": "pendiente", "note": ""}, "plfyrgsn__2026-10-11": {"status": "pendiente", "note": ""}, "plfyrgsn__2026-10-12": {"status": "pendiente", "note": ""}, "pke5uj0y__2026-10-07": {"status": "pendiente", "note": ""}, "pke5uj0y__2026-10-08": {"status": "pendiente", "note": ""}, "pke5uj0y__2026-10-09": {"status": "pendiente", "note": ""}, "pke5uj0y__2026-10-11": {"status": "pendiente", "note": ""}, "pke5uj0y__2026-10-12": {"status": "pendiente", "note": ""}, "ppgyjidd__2026-10-07": {"status": "pendiente", "note": ""}, "ppgyjidd__2026-10-08": {"status": "pendiente", "note": ""}, "ppgyjidd__2026-10-09": {"status": "pendiente", "note": ""}, "ppgyjidd__2026-10-11": {"status": "pendiente", "note": ""}, "ppgyjidd__2026-10-12": {"status": "pendiente", "note": ""}, "p795l548__2026-10-07": {"status": "pendiente", "note": ""}, "p795l548__2026-10-08": {"status": "pendiente", "note": ""}, "p795l548__2026-10-09": {"status": "pendiente", "note": ""}, "p795l548__2026-10-11": {"status": "pendiente", "note": ""}, "p795l548__2026-10-12": {"status": "pendiente", "note": ""}, "pr78am85__2026-10-07": {"status": "pendiente", "note": ""}, "pr78am85__2026-10-08": {"status": "pendiente", "note": ""}, "pr78am85__2026-10-09": {"status": "pendiente", "note": ""}, "pr78am85__2026-10-11": {"status": "pendiente", "note": ""}, "pr78am85__2026-10-12": {"status": "pendiente", "note": ""}, "peqip4fb__2026-10-07": {"status": "pendiente", "note": ""}, "peqip4fb__2026-10-08": {"status": "pendiente", "note": ""}, "peqip4fb__2026-10-09": {"status": "pendiente", "note": ""}, "peqip4fb__2026-10-11": {"status": "pendiente", "note": ""}, "peqip4fb__2026-10-12": {"status": "pendiente", "note": ""}, "p1k6pdsy__2026-10-07": {"status": "pendiente", "note": ""}, "p1k6pdsy__2026-10-08": {"status": "pendiente", "note": ""}, "p1k6pdsy__2026-10-09": {"status": "pendiente", "note": ""}, "p1k6pdsy__2026-10-11": {"status": "pendiente", "note": ""}, "p1k6pdsy__2026-10-12": {"status": "pendiente", "note": ""}, "p7o2s8yf__2026-10-07": {"status": "pendiente", "note": ""}, "p7o2s8yf__2026-10-08": {"status": "pendiente", "note": ""}, "p7o2s8yf__2026-10-09": {"status": "pendiente", "note": ""}, "p7o2s8yf__2026-10-11": {"status": "pendiente", "note": ""}, "p7o2s8yf__2026-10-12": {"status": "pendiente", "note": ""}, "pbhwtyrf__2026-10-07": {"status": "pendiente", "note": ""}, "pbhwtyrf__2026-10-08": {"status": "pendiente", "note": ""}, "pbhwtyrf__2026-10-09": {"status": "pendiente", "note": ""}, "pbhwtyrf__2026-10-11": {"status": "pendiente", "note": ""}, "pbhwtyrf__2026-10-12": {"status": "pendiente", "note": ""}, "ph5nnn3s__2026-10-07": {"status": "pendiente", "note": ""}, "ph5nnn3s__2026-10-08": {"status": "pendiente", "note": ""}, "ph5nnn3s__2026-10-09": {"status": "pendiente", "note": ""}, "ph5nnn3s__2026-10-11": {"status": "pendiente", "note": ""}, "ph5nnn3s__2026-10-12": {"status": "pendiente", "note": ""}, "p006xvb1__2026-10-07": {"status": "pendiente", "note": ""}, "p006xvb1__2026-10-08": {"status": "pendiente", "note": ""}, "p006xvb1__2026-10-09": {"status": "pendiente", "note": ""}, "p006xvb1__2026-10-11": {"status": "pendiente", "note": ""}, "p006xvb1__2026-10-12": {"status": "pendiente", "note": ""}, "p8jqs7e0__2026-10-07": {"status": "pendiente", "note": ""}, "p8jqs7e0__2026-10-08": {"status": "pendiente", "note": ""}, "p8jqs7e0__2026-10-09": {"status": "pendiente", "note": ""}, "p8jqs7e0__2026-10-11": {"status": "pendiente", "note": ""}, "p8jqs7e0__2026-10-12": {"status": "pendiente", "note": ""}, "pv5l82re__2026-10-16": {"status": "pendiente", "note": ""}, "pv5l82re__2026-10-17": {"status": "pendiente", "note": ""}, "pv5l82re__2026-10-19": {"status": "pendiente", "note": ""}, "p34sihro__2026-10-16": {"status": "pendiente", "note": ""}, "p34sihro__2026-10-17": {"status": "pendiente", "note": ""}, "p34sihro__2026-10-19": {"status": "pendiente", "note": ""}, "pgn7s4gz__2026-10-16": {"status": "pendiente", "note": ""}, "pgn7s4gz__2026-10-17": {"status": "pendiente", "note": ""}, "pgn7s4gz__2026-10-19": {"status": "pendiente", "note": ""}, "pfwrimzm__2026-10-16": {"status": "pendiente", "note": ""}, "pfwrimzm__2026-10-17": {"status": "pendiente", "note": ""}, "pfwrimzm__2026-10-19": {"status": "pendiente", "note": ""}, "pfwrimzm__2026-10-20": {"status": "pendiente", "note": ""}, "pfwrimzm__2026-10-21": {"status": "pendiente", "note": ""}, "pdt83axl__2026-10-16": {"status": "pendiente", "note": ""}, "pdt83axl__2026-10-17": {"status": "pendiente", "note": ""}, "pdt83axl__2026-10-19": {"status": "pendiente", "note": ""}, "pdt83axl__2026-10-20": {"status": "pendiente", "note": ""}, "pdt83axl__2026-10-21": {"status": "pendiente", "note": ""}, "p68s9ppu__2026-10-16": {"status": "pendiente", "note": ""}, "p68s9ppu__2026-10-17": {"status": "pendiente", "note": ""}, "p68s9ppu__2026-10-19": {"status": "pendiente", "note": ""}, "p68s9ppu__2026-10-20": {"status": "pendiente", "note": ""}, "p68s9ppu__2026-10-21": {"status": "pendiente", "note": ""}, "pj8be8z1__2026-10-16": {"status": "pendiente", "note": ""}, "pj8be8z1__2026-10-17": {"status": "pendiente", "note": ""}, "pj8be8z1__2026-10-19": {"status": "pendiente", "note": ""}, "pj8be8z1__2026-10-20": {"status": "pendiente", "note": ""}, "pj8be8z1__2026-10-21": {"status": "pendiente", "note": ""}, "png5pavg__2026-10-16": {"status": "pendiente", "note": ""}, "png5pavg__2026-10-17": {"status": "pendiente", "note": ""}, "png5pavg__2026-10-19": {"status": "pendiente", "note": ""}, "png5pavg__2026-10-20": {"status": "pendiente", "note": ""}, "png5pavg__2026-10-21": {"status": "pendiente", "note": ""}, "pt29od23__2026-10-16": {"status": "pendiente", "note": ""}, "pt29od23__2026-10-17": {"status": "pendiente", "note": ""}, "pt29od23__2026-10-19": {"status": "pendiente", "note": ""}, "pt29od23__2026-10-20": {"status": "pendiente", "note": ""}, "pt29od23__2026-10-21": {"status": "pendiente", "note": ""}, "pgn7i4ww__2026-10-16": {"status": "pendiente", "note": ""}, "pgn7i4ww__2026-10-17": {"status": "pendiente", "note": ""}, "pgn7i4ww__2026-10-19": {"status": "pendiente", "note": ""}, "pgn7i4ww__2026-10-20": {"status": "pendiente", "note": ""}, "pgn7i4ww__2026-10-21": {"status": "pendiente", "note": ""}, "pwbzchlq__2026-10-16": {"status": "pendiente", "note": ""}, "pwbzchlq__2026-10-17": {"status": "pendiente", "note": ""}, "pwbzchlq__2026-10-19": {"status": "pendiente", "note": ""}, "pwbzchlq__2026-10-20": {"status": "pendiente", "note": ""}, "pwbzchlq__2026-10-21": {"status": "pendiente", "note": ""}, "pehzy32o__2026-10-16": {"status": "pendiente", "note": ""}, "pehzy32o__2026-10-17": {"status": "pendiente", "note": ""}, "pehzy32o__2026-10-19": {"status": "pendiente", "note": ""}, "pehzy32o__2026-10-20": {"status": "pendiente", "note": ""}, "pehzy32o__2026-10-21": {"status": "pendiente", "note": ""}, "ptzrucg6__2026-10-16": {"status": "pendiente", "note": ""}, "ptzrucg6__2026-10-17": {"status": "pendiente", "note": ""}, "ptzrucg6__2026-10-19": {"status": "pendiente", "note": ""}, "ptzrucg6__2026-10-20": {"status": "pendiente", "note": ""}, "ptzrucg6__2026-10-21": {"status": "pendiente", "note": ""}, "pgivw7oi__2026-10-16": {"status": "pendiente", "note": ""}, "pgivw7oi__2026-10-17": {"status": "pendiente", "note": ""}, "pgivw7oi__2026-10-19": {"status": "pendiente", "note": ""}, "pgivw7oi__2026-10-20": {"status": "pendiente", "note": ""}, "pgivw7oi__2026-10-21": {"status": "pendiente", "note": ""}, "pd9egz50__2026-10-16": {"status": "pendiente", "note": ""}, "pd9egz50__2026-10-17": {"status": "pendiente", "note": ""}, "pd9egz50__2026-10-19": {"status": "pendiente", "note": ""}, "pd9egz50__2026-10-20": {"status": "pendiente", "note": ""}, "pd9egz50__2026-10-21": {"status": "pendiente", "note": ""}, "pgyqdrj1__2026-10-16": {"status": "pendiente", "note": ""}, "pgyqdrj1__2026-10-17": {"status": "pendiente", "note": ""}, "pgyqdrj1__2026-10-19": {"status": "pendiente", "note": ""}, "pgyqdrj1__2026-10-20": {"status": "pendiente", "note": ""}, "pgyqdrj1__2026-10-21": {"status": "pendiente", "note": ""}, "p0lqtqn5__2026-10-04": {"status": "pendiente", "note": ""}, "p0h6mcbk__2026-10-04": {"status": "pendiente", "note": ""}, "pcl8p4o2__2026-10-04": {"status": "pendiente", "note": ""}}}</script><script>
+(function(){
+"use strict";
+
+var MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var MESES_ABR = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+var STATUS_ORDER = ['vacio','pendiente','en-proceso','terminado','no-concluido'];
+var STATUS_LABEL = {vacio:'Sin estado',pendiente:'Pendiente','en-proceso':'En proceso',terminado:'Terminado','no-concluido':'No concluido'};
+var STATUS_ABBR = {vacio:'',pendiente:'P','en-proceso':'E',terminado:'T','no-concluido':'N'};
+var CATEGORY_ORDER = ['camaras','panico','incendio','otros'];
+var CATEGORY_LABEL = {camaras:'📷 Cámaras',panico:'🔴 Botones de pánico',incendio:'🧯 Sistema contra incendio',otros:'📋 Otros'};
+var CATEGORY_LABEL_PLAIN = {camaras:'Cámaras',panico:'Botones de pánico',incendio:'Sistema contra incendio',otros:'Otros'};
+
+function pad(n){return n<10?'0'+n:''+n;}
+function uid(){return 'p'+Math.random().toString(36).slice(2,9);}
+function formatDayMonth(day,month){
+  if(day==null||month==null) return '—';
+  return pad(day)+'/'+pad(month+1);
+}
+
+var DIAS_ABR = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+function isLeapYear(y){return (y%4===0 && y%100!==0) || y%400===0;}
+function daysInYear(y){return isLeapYear(y)?366:365;}
+function daysInMonth(y,m){return new Date(y,m+1,0).getDate();}
+
+function generateMonthDays(year,month){
+  var n=daysInMonth(year,month);
+  var out=[];
+  for(var d=1;d<=n;d++){
+    var date=new Date(year,month,d);
+    out.push({day:d,date:date,weekday:date.getDay()});
+  }
+  return out;
+}
+
+function newItem(category){return {id:uid(),category:category||'otros',label:''};}
+
+/* Día más temprano (dentro de los meses dados, para el año actual) en que
+   el pendiente tiene un estado marcado (distinto de 'vacio'). Se usa para
+   ordenar "por días marcados": el que tenga la marca más antigua va primero.
+   Devuelve null si no tiene ninguna celda marcada. */
+function earliestMarkedDay(item,months){
+  var best=null;
+  months.forEach(function(m){
+    generateMonthDays(state.year,m).forEach(function(d){
+      var c=getCell(item.id,state.year,m,d.day);
+      if(c.status && c.status!=='vacio'){
+        var key=m*100+d.day;
+        if(best===null || key<best.key){ best={key:key,month:m,day:d.day}; }
+      }
+    });
+  });
+  return best;
+}
+
+function defaultState(){
+  var year=2026;
+  var names=['Samborondón','Ciudad Celeste','Murano','Villa Club','FCG','La Joya','Villas del Rey','Ceibos','Bosques'];
+  return {
+    year:year,
+    selectedMonths: [ new Date().getFullYear()===year ? new Date().getMonth() : 0 ],
+    piazzas: names.map(function(n){
+      return {id:uid(),name:n,collapsed:false,collapsedCats:{},items:CATEGORY_ORDER.map(function(c){return newItem(c);})};
+    }),
+    cells:{},
+    piazzaFilter:[],
+    sortMode:'piazza'
+  };
+}
+
+function migrateState(s){
+  if(!s || !s.piazzas) return s;
+  s.piazzas.forEach(function(pz){
+    if(!pz.items || !pz.items.length){
+      pz.items=[{id:pz.id,category:'otros',label:''}];
+    }
+    if(typeof pz.collapsed!=='boolean'){pz.collapsed=false;}
+    if(!pz.collapsedCats || typeof pz.collapsedCats!=='object'){pz.collapsedCats={};}
+  });
+  if(!s.cells) s.cells={};
+  if(!s.selectedMonths || !s.selectedMonths.length){
+    var m = (typeof s.selectedMonth==='number') ? s.selectedMonth : 0;
+    s.selectedMonths=[m];
+  }
+  if(!Array.isArray(s.piazzaFilter)){ s.piazzaFilter=[]; }
+  if(s.sortMode!=='marcado'){ s.sortMode='piazza'; }
+  delete s.selectedMonth;
+  return s;
+}
+
+function findItem(itemId){
+  for(var i=0;i<state.piazzas.length;i++){
+    var pz=state.piazzas[i];
+    for(var j=0;j<pz.items.length;j++){
+      if(pz.items[j].id===itemId) return {piazza:pz,item:pz.items[j]};
+    }
+  }
+  return null;
+}
+
+var state=null;
+var readOnly=false;
+var dbApi=null;
+var saveTimer=null;
+var STORAGE_KEY='cronograma-piazza-v2';
+
+/* ---------- guardado permanente (capacidad "db" del artefacto) ----------
+   Cada Piazza se guarda como un documento (colección "piazzas") y cada
+   pendiente tiene su propio documento en la colección "cells" con un
+   campo por día marcado. Así lo que cada persona ingresa se guarda de
+   forma permanente y compartida, sin depender de este navegador ni de
+   volver a publicar la página. */
+
+function dbUpsertPiazza(pz){
+  if(!dbApi) return Promise.resolve();
+  var order=state.piazzas.indexOf(pz);
+  return dbApi.collection('piazzas').doc(pz.id).set({
+    name: pz.name,
+    order: order===-1?0:order,
+    collapsed: !!pz.collapsed,
+    collapsedCats: pz.collapsedCats||{},
+    items: pz.items
+  }).catch(function(){});
+}
+function dbDeletePiazza(pzId){
+  if(!dbApi) return;
+  dbApi.collection('piazzas').doc(pzId).delete().catch(function(){});
+}
+function dbUpsertItemCellsBatch(itemId, patchObj){
+  if(!dbApi) return;
+  var ref=dbApi.collection('cells').doc(itemId);
+  ref.set(patchObj,{merge:true}).catch(function(){});
+}
+function dbDeleteItemCells(itemId){
+  if(!dbApi) return;
+  dbApi.collection('cells').doc(itemId).delete().catch(function(){});
+}
+
+function cellKey(itemId,year,month,day){return itemId+'__'+year+'-'+pad(month+1)+'-'+pad(day);}
+
+function getCell(itemId,year,month,day){
+  var k=cellKey(itemId,year,month,day);
+  return state.cells[k]||{status:'vacio',note:''};
+}
+function setCell(itemId,year,month,day,patch){
+  var k=cellKey(itemId,year,month,day);
+  var cur=state.cells[k]||{status:'vacio',note:''};
+  var next={status:patch.status!==undefined?patch.status:cur.status,note:patch.note!==undefined?patch.note:cur.note};
+  if(next.status==='vacio' && !next.note){
+    delete state.cells[k];
+  } else {
+    state.cells[k]=next;
+  }
+  var datePart=year+'-'+pad(month+1)+'-'+pad(day);
+  var patchObj={};
+  patchObj[datePart]={status:next.status,note:next.note};
+  dbUpsertItemCellsBatch(itemId, patchObj);
+}
+
+function cycleStatus(s){
+  var i=STATUS_ORDER.indexOf(s);
+  return STATUS_ORDER[(i+1)%STATUS_ORDER.length];
+}
+
+/* Borra (deja en blanco, sin estado ni nota) las celdas de los meses
+   seleccionados y de las Piazzas visibles según el filtro actual.
+   filterStatus=null limpia todo; si se pasa un estado, solo limpia las
+   celdas que tengan exactamente ese estado. */
+function clearCells(filterStatus){
+  var months=selectedMonthsSorted();
+  var piazzasToClear = state.piazzaFilter.length
+    ? state.piazzas.filter(function(p){return state.piazzaFilter.indexOf(p.id)!==-1;})
+    : state.piazzas;
+  var itemIds={};
+  piazzasToClear.forEach(function(pz){ pz.items.forEach(function(it){ itemIds[it.id]=true; }); });
+  var count=0;
+  var dbPatchByItem={};
+  Object.keys(state.cells).forEach(function(k){
+    var idx=k.indexOf('__');
+    if(idx===-1) return;
+    var itemId=k.slice(0,idx);
+    if(!itemIds[itemId]) return;
+    var datePart=k.slice(idx+2);
+    var yr=parseInt(datePart.slice(0,4),10);
+    var mo=parseInt(datePart.slice(5,7),10)-1;
+    if(yr!==state.year) return;
+    if(months.indexOf(mo)===-1) return;
+    if(filterStatus && state.cells[k].status!==filterStatus) return;
+    delete state.cells[k];
+    dbPatchByItem[itemId]=dbPatchByItem[itemId]||{};
+    dbPatchByItem[itemId][datePart]={status:'vacio',note:''};
+    count++;
+  });
+  /* Se agrupan las celdas borradas por pendiente para hacer un solo
+     guardado por cada uno, en vez de uno por cada día. */
+  Object.keys(dbPatchByItem).forEach(function(itemId){
+    dbUpsertItemCellsBatch(itemId, dbPatchByItem[itemId]);
+  });
+  return count;
+}
+
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* ---------- rendering ---------- */
+
+function allItems(){
+  var out=[];
+  state.piazzas.forEach(function(pz){pz.items.forEach(function(it){out.push(it);});});
+  return out;
+}
+
+function computePiazzaStats(pz){
+  var counts={pendiente:0,'en-proceso':0,terminado:0,'no-concluido':0};
+  var itemIds={};
+  pz.items.forEach(function(it){itemIds[it.id]=true;});
+  var yearPrefix=state.year+'-';
+  Object.keys(state.cells).forEach(function(k){
+    var idx=k.indexOf('__');
+    if(idx===-1) return;
+    var itemId=k.slice(0,idx);
+    if(!itemIds[itemId]) return;
+    var datePart=k.slice(idx+2);
+    if(datePart.indexOf(yearPrefix)!==0) return;
+    var c=state.cells[k];
+    if(c.status && c.status!=='vacio'){
+      counts[c.status]=(counts[c.status]||0)+1;
+    }
+  });
+  return counts;
+}
+
+function computeCategoryStats(pz,cat){
+  var items=pz.items.filter(function(it){return it.category===cat;});
+  var counts={pendiente:0,'en-proceso':0,terminado:0,'no-concluido':0};
+  var itemIds={};
+  items.forEach(function(it){itemIds[it.id]=true;});
+  var yearPrefix=state.year+'-';
+  Object.keys(state.cells).forEach(function(k){
+    var idx=k.indexOf('__');
+    if(idx===-1) return;
+    var itemId=k.slice(0,idx);
+    if(!itemIds[itemId]) return;
+    var datePart=k.slice(idx+2);
+    if(datePart.indexOf(yearPrefix)!==0) return;
+    var c=state.cells[k];
+    if(c.status && c.status!=='vacio'){
+      counts[c.status]=(counts[c.status]||0)+1;
+    }
+  });
+  return {count:items.length, counts:counts};
+}
+
+function computeYearStats(){
+  var counts={pendiente:0,'en-proceso':0,terminado:0,'no-concluido':0};
+  var totalTracked=0;
+  var totalPossible=allItems().length*daysInYear(state.year);
+  var prefix='__'+state.year+'-';
+  Object.keys(state.cells).forEach(function(k){
+    if(k.indexOf(prefix)===-1) return;
+    var c=state.cells[k];
+    if(c.status && c.status!=='vacio'){
+      counts[c.status]=(counts[c.status]||0)+1;
+      totalTracked++;
+    }
+  });
+  var pct = totalPossible ? Math.round((counts.terminado/totalPossible)*100) : 0;
+  return {counts:counts, totalPossible:totalPossible, totalTracked:totalTracked, pct:pct};
+}
+
+function selectedMonthsSorted(){
+  return state.selectedMonths.slice().sort(function(a,b){return a-b;});
+}
+
+function itemRowHtml(item,pz,daysAll,showMeta,markInfo){
+  var html='<tr class="item-row">';
+  html+='<td class="rowhead-col">';
+  html+='<div class="item-head-simple'+(showMeta?' flat':'')+'">';
+  if(showMeta){
+    html+='<span class="item-meta" title="'+escapeHtml(pz.name)+' &middot; '+escapeHtml(CATEGORY_LABEL_PLAIN[item.category])+'">';
+    html+='<span class="item-meta-pz">'+escapeHtml(pz.name)+'</span>';
+    html+='<span class="item-meta-cat">'+CATEGORY_LABEL[item.category]+'</span>';
+    if(markInfo){
+      html+='<span class="item-meta-day" title="Día más antiguo marcado">&#128197; '+formatDayMonth(markInfo.day,markInfo.month)+'</span>';
+    } else {
+      html+='<span class="item-meta-day none">Sin marcar</span>';
+    }
+    html+='</span>';
+  }
+  html+='<input class="item-label" data-act="rename-item" data-item="'+item.id+'" placeholder="Detalle del pendiente" value="'+escapeHtml(item.label)+'"'+(readOnly?' disabled':'')+'>';
+  if(!readOnly){
+    html+='<button class="rm" data-act="remove-item" data-item="'+item.id+'" data-pz="'+pz.id+'">Eliminar</button>';
+  }
+  html+='</div></td>';
+  daysAll.forEach(function(d){
+    var c=getCell(item.id,state.year,d.month,d.day);
+    var weekend=(d.weekday===0||d.weekday===6);
+    html+='<td class="cell-col'+(weekend?' weekend':'')+'">';
+    html+='<div class="cell '+c.status+'" data-act="cycle" tabindex="0" data-item="'+item.id+'" data-month="'+d.month+'" data-day="'+d.day+'" title="'+escapeHtml(CATEGORY_LABEL_PLAIN[item.category])+' — '+escapeHtml(STATUS_LABEL[c.status])+(c.note?(' — '+escapeHtml(c.note)):'')+'">';
+    html+=STATUS_ABBR[c.status];
+    if(c.note){html+='<span class="note-flag"></span>';}
+    html+='<button class="note-btn" data-act="note" data-item="'+item.id+'" data-month="'+d.month+'" data-day="'+d.day+'" aria-label="Nota" title="Agregar nota">&#9998;</button>';
+    html+='</div></td>';
+  });
+  html+='</tr>';
+  return html;
+}
+
+function renderApp(){
+  var app=document.getElementById('app');
+  var prevGrid=document.querySelector('.grid-scroll');
+  var prevScroll=prevGrid?{top:prevGrid.scrollTop,left:prevGrid.scrollLeft}:null;
+  var prevWinY=window.scrollY;
+  var months=selectedMonthsSorted();
+  var multi=months.length>1;
+  var daysAll=[];
+  months.forEach(function(m){
+    generateMonthDays(state.year,m).forEach(function(d){
+      daysAll.push({month:m,day:d.day,weekday:d.weekday});
+    });
+  });
+  var stats=computeYearStats();
+
+  var html='';
+
+  html+='<div id="sticky-top">';
+  html+='<div class="topbar">';
+  html+='<div class="brand"><h1>Cronograma Piazza</h1><p class="sub">Pendientes del reporte de cámaras &middot; seguimiento diario por Piazza y categoría</p></div>';
+  html+='<div class="topbar-controls">';
+  html+='<div class="status-badge"><span class="dot'+(readOnly?' readonly':'')+'"></span>'+(readOnly?'Solo lectura':'Guardado automático')+'</div>';
+  html+='<div class="year-stepper"><button data-act="year-prev" aria-label="Año anterior">&#8249;</button><span class="year-val mono">'+state.year+'</span><button data-act="year-next" aria-label="Año siguiente">&#8250;</button></div>';
+  html+='<button class="btn primary" data-act="export">&#128190; Exportar</button>';
+  html+='</div></div>';
+
+  html+='<div class="summary">';
+  html+='<div class="stat pend"><div class="n mono">'+stats.counts.pendiente+'</div><div class="l">Pendiente</div></div>';
+  html+='<div class="stat proc"><div class="n mono">'+stats.counts['en-proceso']+'</div><div class="l">En proceso</div></div>';
+  html+='<div class="stat term"><div class="n mono">'+stats.counts.terminado+'</div><div class="l">Terminado</div></div>';
+  html+='<div class="stat noc"><div class="n mono">'+stats.counts['no-concluido']+'</div><div class="l">No concluido</div></div>';
+  html+='<div class="stat progress"><div class="l">Progreso '+state.year+' &middot; '+stats.pct+'%</div><div class="progress-bar"><div style="width:'+stats.pct+'%"></div></div></div>';
+  html+='</div>';
+
+  html+='<div class="month-tabs">';
+  MESES.forEach(function(m,i){
+    var cnt=daysInMonth(state.year,i);
+    html+='<button class="month-tab'+(months.indexOf(i)!==-1?' active':'')+'" data-act="month" data-month="'+i+'">'+m.slice(0,3)+'<span class="cnt">'+cnt+'d</span></button>';
+  });
+  html+='</div>';
+
+  html+='<div class="piazza-tabs">';
+  html+='<button class="piazza-tab'+(!state.piazzaFilter.length?' active':'')+'" data-act="piazza-filter-all">Todas las Piazzas</button>';
+  state.piazzas.forEach(function(pz){
+    var pzActive=state.piazzaFilter.indexOf(pz.id)!==-1;
+    html+='<button class="piazza-tab'+(pzActive?' active':'')+'" data-act="piazza-filter-toggle" data-pz="'+pz.id+'">'+escapeHtml(pz.name)+'</button>';
+  });
+  html+='</div>';
+  html+='</div>';
+  html+='<div id="sticky-spacer"></div>';
+
+  var piazzasToShow = state.piazzaFilter.length
+    ? state.piazzas.filter(function(p){return state.piazzaFilter.indexOf(p.id)!==-1;})
+    : state.piazzas;
+
+  html+='<div class="card">';
+  html+='<div class="card-toolbar">';
+  html+='<div class="toolbar-group"><span class="sort-label">Ordenar por</span>';
+  html+='<button class="sort-btn'+(state.sortMode==='piazza'?' active':'')+'" data-act="sort-piazza">Piazza</button>';
+  html+='<button class="sort-btn'+(state.sortMode==='marcado'?' active':'')+'" data-act="sort-marcado">Días marcados</button>';
+  html+='</div>';
+  if(state.sortMode==='piazza'){
+    html+='<div class="toolbar-group"><button data-act="expand-all">Expandir todas</button><button data-act="collapse-all">Colapsar todas</button></div>';
+  }
+  if(!readOnly){
+    html+='<div class="toolbar-group"><details class="clear-menu"><summary>&#129529; Limpiar</summary>';
+    html+='<div class="clear-menu-list">';
+    html+='<button type="button" data-act="clear-confirm-open" data-status="">Limpiar todo</button>';
+    html+='<button type="button" data-act="clear-confirm-open" data-status="pendiente">Limpiar Pendiente</button>';
+    html+='<button type="button" data-act="clear-confirm-open" data-status="en-proceso">Limpiar En proceso</button>';
+    html+='<button type="button" data-act="clear-confirm-open" data-status="terminado">Limpiar Terminado</button>';
+    html+='<button type="button" data-act="clear-confirm-open" data-status="no-concluido">Limpiar No concluido</button>';
+    html+='</div></details></div>';
+  }
+  html+='</div>';
+  html+='<div class="grid-scroll"><table class="sched"><thead><tr>';
+  html+='<th class="rowhead-col">Piazza / Pendiente</th>';
+  daysAll.forEach(function(d){
+    var weekend=(d.weekday===0||d.weekday===6);
+    html+='<th class="'+(weekend?'weekend':'')+'"><span class="wk">'+pad(d.day)+'</span><span class="rng">'+DIAS_ABR[d.weekday]+'</span>'+(multi?('<span class="mo">'+MESES_ABR[d.month]+'</span>'):'')+'</th>';
+  });
+  html+='</tr></thead><tbody>';
+
+  if(state.sortMode==='marcado'){
+    var flatRows=[];
+    piazzasToShow.forEach(function(pz){
+      pz.items.forEach(function(item){
+        flatRows.push({item:item,pz:pz,mark:earliestMarkedDay(item,months)});
+      });
+    });
+    flatRows.sort(function(a,b){
+      if(!a.mark && !b.mark) return 0;
+      if(!a.mark) return 1;
+      if(!b.mark) return -1;
+      return a.mark.key-b.mark.key;
+    });
+    if(!flatRows.length){
+      html+='<tr><td class="rowhead-col" colspan="'+(daysAll.length+1)+'" style="text-align:center;color:var(--text-muted);padding:24px;">No hay pendientes para mostrar.</td></tr>';
+    }
+    flatRows.forEach(function(r){
+      html+=itemRowHtml(r.item,r.pz,daysAll,true,r.mark);
+    });
+  } else {
+    piazzasToShow.forEach(function(pz){
+      html+='<tr class="piazza-group">';
+      html+='<td class="rowhead-col">';
+      html+='<div class="piazza-head-row"><button class="collapse-toggle'+(pz.collapsed?' collapsed':'')+'" data-act="toggle-piazza" data-pz="'+pz.id+'" aria-label="Expandir o colapsar">&#9662;</button>';
+      html+='<input class="piazza-name" data-act="rename" data-pz="'+pz.id+'" value="'+escapeHtml(pz.name)+'"'+(readOnly?' disabled':'')+'></div>';
+      if(!readOnly){
+        html+='<div class="row-tools"><button class="rm" data-act="remove-piazza" data-pz="'+pz.id+'">Eliminar Piazza</button></div>';
+      }
+      if(pz.collapsed){
+        var pstats=computePiazzaStats(pz);
+        html+='<div class="piazza-mini-stats">'+pz.items.length+' pendiente'+(pz.items.length===1?'':'s')+' &middot; <b>'+pstats.terminado+'</b> term. &middot; <b>'+pstats['en-proceso']+'</b> proc. &middot; <b>'+pstats.pendiente+'</b> pend. &middot; <b>'+pstats['no-concluido']+'</b> no concl.</div>';
+      }
+      html+='</td>';
+      html+='<td class="piazza-head-fill" colspan="'+daysAll.length+'"></td>';
+      html+='</tr>';
+
+      if(pz.collapsed) return;
+
+      CATEGORY_ORDER.forEach(function(cat){
+        var catCollapsed=!!pz.collapsedCats[cat];
+        html+='<tr class="category-group">';
+        html+='<td class="rowhead-col category-head">';
+        html+='<div class="category-head-row"><button class="collapse-toggle'+(catCollapsed?' collapsed':'')+'" data-act="toggle-category" data-pz="'+pz.id+'" data-cat="'+cat+'" aria-label="Expandir o colapsar">&#9662;</button><span>'+CATEGORY_LABEL[cat]+'</span></div>';
+        if(catCollapsed){
+          var cstats=computeCategoryStats(pz,cat);
+          html+='<div class="piazza-mini-stats">'+cstats.count+' pendiente'+(cstats.count===1?'':'s')+' &middot; <b>'+cstats.counts.terminado+'</b> term. &middot; <b>'+cstats.counts['en-proceso']+'</b> proc. &middot; <b>'+cstats.counts.pendiente+'</b> pend. &middot; <b>'+cstats.counts['no-concluido']+'</b> no concl.</div>';
+        }
+        html+='</td>';
+        html+='<td class="category-head-fill" colspan="'+daysAll.length+'"></td>';
+        html+='</tr>';
+
+        if(catCollapsed) return;
+
+        pz.items.filter(function(it){return it.category===cat;}).forEach(function(item){
+          html+=itemRowHtml(item,pz,daysAll,false);
+        });
+
+        if(!readOnly){
+          html+='<tr class="add-pendiente-row">';
+          html+='<td class="rowhead-col"><input class="quick-add-input" data-act="quick-add" data-pz="'+pz.id+'" data-cat="'+cat+'" placeholder="+ Escribe un pendiente y presiona Enter"></td>';
+          html+='<td colspan="'+daysAll.length+'"></td>';
+          html+='</tr>';
+        }
+      });
+    });
+
+    if(!readOnly){
+      html+='<tr><td class="add-row-cell rowhead-col" colspan="1"><button class="add-row-btn" data-act="add-piazza">+ Agregar Piazza</button></td>';
+      html+='<td colspan="'+daysAll.length+'"></td></tr>';
+    }
+  }
+
+  html+='</tbody></table></div>';
+  html+='<div class="legend">';
+  ['pendiente','en-proceso','terminado','no-concluido','vacio'].forEach(function(s){
+    html+='<span class="item"><span class="sw '+s+'"></span>'+STATUS_LABEL[s]+'</span>';
+  });
+  html+='<span class="hint">Clic: cambiar estado &nbsp;&middot;&nbsp; &#9998;: agregar nota &nbsp;&middot;&nbsp; el desplegable clasifica el pendiente</span>';
+  html+='</div>';
+  html+='</div>';
+
+  app.innerHTML=html;
+  if(prevScroll){
+    var newGrid=document.querySelector('.grid-scroll');
+    if(newGrid){ newGrid.scrollTop=prevScroll.top; newGrid.scrollLeft=prevScroll.left; }
+  }
+  if(prevWinY){ window.scrollTo(0,prevWinY); }
+  updateStickyBarHeight();
+  wireGridFreeze();
+}
+
+/* Manually pins the day-header row and the Piazza/Pendiente column via a
+   scroll-driven transform instead of position:sticky (see CSS comment above
+   table.sched thead th for why). Runs once per render since app.innerHTML
+   replaces .grid-scroll each time, dropping any previous listener with it. */
+function wireGridFreeze(){
+  var grid=document.querySelector('.grid-scroll');
+  if(!grid) return;
+  var headThs=grid.querySelectorAll('table.sched thead th');
+  var bodyRowheads=grid.querySelectorAll('tbody td.rowhead-col');
+  var ticking=false;
+  function apply(){
+    ticking=false;
+    var st=grid.scrollTop, sl=grid.scrollLeft;
+    for(var i=0;i<headThs.length;i++){
+      var th=headThs[i];
+      th.style.transform = th.classList.contains('rowhead-col')
+        ? 'translate3d('+sl+'px,'+st+'px,0)'
+        : 'translate3d(0,'+st+'px,0)';
+    }
+    for(var j=0;j<bodyRowheads.length;j++){
+      bodyRowheads[j].style.transform='translate3d('+sl+'px,0,0)';
+    }
+  }
+  apply();
+  grid.addEventListener('scroll',function(){
+    if(!ticking){ ticking=true; requestAnimationFrame(apply); }
+  },{passive:true});
+}
+
+function updateStickyBarHeight(){
+  var bar=document.getElementById('sticky-top');
+  var scrollEl=document.querySelector('.grid-scroll');
+  if(!bar) return;
+  requestAnimationFrame(function(){
+    document.documentElement.style.setProperty('--stickybar-h', bar.getBoundingClientRect().height+'px');
+    if(scrollEl){
+      var top=scrollEl.getBoundingClientRect().top;
+      var maxH=Math.max(240, window.innerHeight - top - 140);
+      document.documentElement.style.setProperty('--grid-max-h', maxH+'px');
+    }
+  });
+}
+
+var PRINT_STATUS_COLORS={
+  vacio:{bg:'#eef3f4',fg:'#54737a'},
+  pendiente:{bg:'#fdf0d8',fg:'#b8730a'},
+  'en-proceso':{bg:'#e1eafc',fg:'#2255c4'},
+  terminado:{bg:'#dcf3e7',fg:'#1f8f5c'},
+  'no-concluido':{bg:'#fbe2e2',fg:'#c8323a'}
+};
+
+function printLegendHtml(){
+  var html='<div class="print-legend" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:0 0 16px;padding:10px 14px;border:1px solid #d2dfe2;border-radius:8px;background:#f7fafb;">';
+  html+='<strong style="font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;color:#54737a;">Nomenclatura</strong>';
+  STATUS_ORDER.forEach(function(s){
+    var col=PRINT_STATUS_COLORS[s];
+    html+='<span style="display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:#132327;">';
+    html+='<span style="display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 4px;border-radius:5px;background:'+col.bg+';color:'+col.fg+';font-family:IBM Plex Mono,monospace;font-weight:700;font-size:12.5px;border:1px solid #d2dfe2;">'+(STATUS_ABBR[s]||'–')+'</span>';
+    html+=STATUS_LABEL[s]+'</span>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function renderPrintArea(filter){
+  var area=document.getElementById('print-area');
+  var stats=computeYearStats();
+  var months=filter.months, dayFrom=filter.dayFrom, dayTo=filter.dayTo, piazzaIds=filter.piazzaIds, categories=filter.categories;
+  var html='<div style="font-family:IBM Plex Sans,sans-serif;padding:20px;color:#132327;">';
+  html+='<h1 style="font-family:\'Big Shoulders Display\',sans-serif;font-size:30px;margin:0 0 3px;">Cronograma Piazza '+state.year+'</h1>';
+  html+='<p style="color:#54737a;font-size:14px;margin:0 0 12px;">Pendientes del reporte de cámaras &middot; progreso '+stats.pct+'% &middot; generado '+new Date().toLocaleDateString('es-EC')+'</p>';
+  html+=printLegendHtml();
+  var anyContent=false;
+  for(var m=0;m<12;m++){
+    if(months.indexOf(m)===-1) continue;
+    var lastDay=daysInMonth(state.year,m);
+    var from=Math.max(1,Math.min(dayFrom,lastDay));
+    var to=Math.max(from,Math.min(dayTo,lastDay));
+    var daysMonth=generateMonthDays(state.year,m).filter(function(d){return d.day>=from && d.day<=to;});
+    if(!daysMonth.length) continue;
+    var piazzasToPrint=state.piazzas.filter(function(pz){return piazzaIds.indexOf(pz.id)!==-1;});
+    var flatItems=[];
+    piazzasToPrint.forEach(function(pz){
+      pz.items.filter(function(it){return categories.indexOf(it.category)!==-1;}).forEach(function(item){
+        flatItems.push({pz:pz,item:item});
+      });
+    });
+    /* Ordenado por el día marcado más antiguo dentro de este mes (ascendente);
+       los pendientes sin ninguna marca quedan al final. */
+    flatItems.forEach(function(r){ r.mark=earliestMarkedDay(r.item,[m]); });
+    flatItems.sort(function(a,b){
+      if(!a.mark && !b.mark) return 0;
+      if(!a.mark) return 1;
+      if(!b.mark) return -1;
+      return a.mark.key-b.mark.key;
+    });
+    if(!flatItems.length) continue;
+    var monthHtml='';
+    /* Se traza una línea gruesa arriba de la primera fila de cada Piazza
+       (cuando cambia respecto a la fila anterior) para separarlas
+       visualmente, ya que la lista está ordenada por día marcado y no
+       agrupada bajo un encabezado de Piazza. */
+    var prevPzId=null;
+    flatItems.forEach(function(r){
+      var pz=r.pz, item=r.item;
+      var rowLabel=CATEGORY_LABEL_PLAIN[item.category]+(item.label?(' · '+item.label):'');
+      var markText=r.mark?formatDayMonth(r.mark.day,r.mark.month):'—';
+      var isNewPz=(pz.id!==prevPzId);
+      prevPzId=pz.id;
+      var topBorder=isNewPz?'border-top:3px solid #132327;':'';
+      monthHtml+='<tr>';
+      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;font-weight:600;">'+escapeHtml(pz.name)+'</td>';
+      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;">'+escapeHtml(rowLabel)+'</td>';
+      monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:4px 6px;white-space:nowrap;text-align:center;font-family:IBM Plex Mono,monospace;">'+markText+'</td>';
+      daysMonth.forEach(function(d){
+        var c=getCell(item.id,state.year,m,d.day);
+        var col=PRINT_STATUS_COLORS[c.status];
+        monthHtml+='<td style="border:1px solid #d2dfe2;'+topBorder+'padding:3px;text-align:center;background:'+col.bg+';color:'+col.fg+';font-family:IBM Plex Mono,monospace;font-weight:600;">'+STATUS_ABBR[c.status]+'</td>';
+      });
+      monthHtml+='</tr>';
+    });
+    anyContent=true;
+    html+='<div class="print-month"><h2 style="font-family:\'Big Shoulders Display\',sans-serif;font-size:19px;margin:16px 0 8px;border-bottom:2px solid #0f7a8c;padding-bottom:4px;">'+MESES[m]+' &middot; días '+pad(from)+'–'+pad(to)+' &middot; ordenado por día marcado</h2>';
+    html+='<table style="border-collapse:collapse;width:100%;font-size:11px;"><thead><tr>';
+    html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Piazza</th>';
+    html+='<th style="text-align:left;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">Pendiente</th>';
+    html+='<th style="text-align:center;border:1px solid #d2dfe2;padding:4px 6px;background:#e7eff1;">1er día marcado</th>';
+    daysMonth.forEach(function(d){
+      html+='<th style="border:1px solid #d2dfe2;padding:3px;background:#e7eff1;font-family:IBM Plex Mono,monospace;">'+pad(d.day)+'<br><span style="font-weight:400;">'+DIAS_ABR[d.weekday]+'</span></th>';
+    });
+    html+='</tr></thead><tbody>'+monthHtml+'</tbody></table></div>';
+  }
+  if(!anyContent){
+    html+='<p style="color:#54737a;">No hay datos para los filtros seleccionados.</p>';
+  }
+  html+='</div>';
+  area.innerHTML=html;
+  return anyContent;
+}
+
+/* ---------- persistence ---------- */
+
+function syncStateScript(){
+  document.getElementById('state-data').textContent=JSON.stringify(state);
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h=setTimeout(function(){t.classList.remove('show');},2200);
+}
+
+function fullDocumentHTML(){
+  var styleHTML=document.getElementById('page-style').outerHTML;
+  var fontLink=document.getElementById('font-link').outerHTML;
+  var scriptHTML=document.getElementById('page-script').outerHTML;
+  var appHTML=document.getElementById('app').outerHTML;
+  var stateHTML=document.getElementById('state-data').outerHTML;
+  var printHTML='<div id="print-area"></div>';
+  var modalHTML='<div id="modal-root"></div>';
+  var toastHTML='<div class="toast" id="toast"></div>';
+  return '<!doctype html>\n<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cronograma Piazza</title>'+fontLink+styleHTML+'</head><body>'+appHTML+stateHTML+printHTML+modalHTML+toastHTML+scriptHTML+'</body></html>';
+}
+
+function persist(){
+  /* El guardado permanente de cada cambio ya se hace en el momento (ver
+     dbUpsertPiazza / dbUpsertItemCellsBatch en cada acción). Aquí solo
+     se mantiene una copia local como respaldo, por si no hay conexión. */
+  syncStateScript();
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+  },400);
+}
+
+/* ---------- note modal ---------- */
+
+function openNoteModal(itemId,month,day){
+  var found=findItem(itemId);
+  if(!found) return;
+  var pz=found.piazza, item=found.item;
+  var c=getCell(itemId,state.year,month,day);
+  var date=new Date(state.year,month,day);
+  var root=document.getElementById('modal-root');
+  var html='<div class="modal-overlay" data-act="modal-close"><div class="modal" data-stop="1">';
+  html+='<h3>'+escapeHtml(pz.name)+'</h3>';
+  html+='<div class="meta">'+escapeHtml(CATEGORY_LABEL_PLAIN[item.category])+(item.label?(' · '+escapeHtml(item.label)):'')+'<br>'+DIAS_ABR[date.getDay()]+' '+pad(day)+' de '+MESES[month]+' &middot; '+state.year+'</div>';
+  html+='<div class="status-row">';
+  STATUS_ORDER.forEach(function(s){
+    html+='<button class="status-choice '+s+(c.status===s?' active':'')+'" data-act="set-status" data-status="'+s+'">'+STATUS_LABEL[s]+'</button>';
+  });
+  html+='</div>';
+  html+='<textarea id="note-text" placeholder="Detalle del pendiente…">'+escapeHtml(c.note)+'</textarea>';
+  html+='<div class="actions" style="margin-top:12px;">';
+  html+='<button class="btn ghost" data-act="modal-close">Cancelar</button>';
+  html+='<button class="btn primary" data-act="save-note" data-item="'+itemId+'" data-month="'+month+'" data-day="'+day+'">Guardar</button>';
+  html+='</div></div></div>';
+  root.innerHTML=html;
+  root.dataset.status=c.status;
+}
+
+function closeModal(){document.getElementById('modal-root').innerHTML='';}
+
+/* ---------- clear confirm modal ---------- */
+
+function openClearConfirmModal(status){
+  var root=document.getElementById('modal-root');
+  var months=selectedMonthsSorted().map(function(m){return MESES[m];}).join(', ');
+  var scopePiazza = state.piazzaFilter.length
+    ? state.piazzas.filter(function(p){return state.piazzaFilter.indexOf(p.id)!==-1;}).map(function(p){return p.name;}).join(', ')
+    : 'Todas las Piazzas';
+  var what = status ? ('los pendientes marcados como <b>'+escapeHtml(STATUS_LABEL[status])+'</b>') : '<b>todos</b> los pendientes (estado y notas)';
+  var html='<div class="modal-overlay" data-act="modal-close"><div class="modal" data-stop="1">';
+  html+='<h3>Limpiar '+(status?escapeHtml(STATUS_LABEL[status]):'todo')+'</h3>';
+  html+='<div class="meta">Esto borrará '+what+' en:<br>&middot; <b>Piazza(s):</b> '+escapeHtml(scopePiazza)+'<br>&middot; <b>Mes(es):</b> '+escapeHtml(months)+' de '+state.year+'<br><br>Esta acción no se puede deshacer.</div>';
+  html+='<div class="actions" style="margin-top:14px;">';
+  html+='<button class="btn ghost" data-act="modal-close">Cancelar</button>';
+  html+='<button class="btn danger" data-act="clear-confirm" data-status="'+(status||'')+'">Sí, limpiar</button>';
+  html+='</div></div></div>';
+  root.innerHTML=html;
+}
+
+/* ---------- export modal ---------- */
+
+function openExportModal(){
+  var root=document.getElementById('modal-root');
+  var selMonths=state.selectedMonths;
+  var html='<div class="modal-overlay" data-act="modal-close"><div class="modal export-modal" data-stop="1">';
+  html+='<h3>Exportar PDF</h3>';
+  html+='<div class="meta">Elige qué incluir en el cronograma '+state.year+'</div>';
+
+  html+='<div class="export-section"><div class="export-section-head"><span>Meses</span><button type="button" class="link-btn" data-act="export-all-months">Todos</button><button type="button" class="link-btn" data-act="export-none-months">Ninguno</button></div>';
+  html+='<div class="export-grid months">';
+  MESES.forEach(function(m,i){
+    html+='<label class="export-check"><input type="checkbox" data-kind="month" value="'+i+'"'+(selMonths.indexOf(i)!==-1?' checked':'')+'>'+m.slice(0,3)+'</label>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="export-section"><div class="export-section-head"><span>Rango de días</span></div>';
+  html+='<div class="export-day-range">Del día <input type="number" id="export-day-from" min="1" max="31" value="1"> al <input type="number" id="export-day-to" min="1" max="31" value="31"></div></div>';
+
+  html+='<div class="export-section"><div class="export-section-head"><span>Piazzas</span><button type="button" class="link-btn" data-act="export-all-piazzas">Todas</button><button type="button" class="link-btn" data-act="export-none-piazzas">Ninguna</button></div>';
+  html+='<div class="export-grid piazzas">';
+  state.piazzas.forEach(function(pz){
+    html+='<label class="export-check"><input type="checkbox" data-kind="piazza" value="'+pz.id+'" checked>'+escapeHtml(pz.name)+'</label>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="export-section"><div class="export-section-head"><span>Pendientes</span></div>';
+  html+='<div class="export-grid categories">';
+  CATEGORY_ORDER.forEach(function(c){
+    html+='<label class="export-check"><input type="checkbox" data-kind="category" value="'+c+'" checked>'+CATEGORY_LABEL[c]+'</label>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="actions" style="margin-top:6px;">';
+  html+='<button class="btn ghost" data-act="modal-close">Cancelar</button>';
+  html+='<button class="btn primary" data-act="export-generate">Generar PDF</button>';
+  html+='</div></div></div>';
+  root.innerHTML=html;
+}
+
+function setAllChecks(kind,val){
+  document.querySelectorAll('[data-kind="'+kind+'"]').forEach(function(cb){cb.checked=val;});
+}
+
+function runExportGenerate(){
+  var months=Array.prototype.map.call(document.querySelectorAll('[data-kind="month"]:checked'),function(cb){return parseInt(cb.value,10);});
+  var piazzaIds=Array.prototype.map.call(document.querySelectorAll('[data-kind="piazza"]:checked'),function(cb){return cb.value;});
+  var categories=Array.prototype.map.call(document.querySelectorAll('[data-kind="category"]:checked'),function(cb){return cb.value;});
+  var dayFrom=parseInt(document.getElementById('export-day-from').value,10)||1;
+  var dayTo=parseInt(document.getElementById('export-day-to').value,10)||31;
+  if(dayFrom>dayTo){var tmp=dayFrom;dayFrom=dayTo;dayTo=tmp;}
+  if(!months.length || !piazzaIds.length || !categories.length){
+    showToast('Selecciona al menos un mes, una Piazza y un tipo de pendiente');
+    return;
+  }
+  var has=renderPrintArea({months:months,dayFrom:dayFrom,dayTo:dayTo,piazzaIds:piazzaIds,categories:categories});
+  closeModal();
+  if(!has){
+    showToast('No hay datos para esos filtros');
+    return;
+  }
+  document.body.classList.add('printing');
+  setTimeout(function(){
+    window.print();
+  },50);
+}
+
+/* ---------- events ---------- */
+
+function onAppClick(e){
+  var el=e.target.closest('[data-act]');
+  if(!el) return;
+  var act=el.dataset.act;
+
+  if(act==='year-prev'||act==='year-next'){
+    state.year += act==='year-prev' ? -1 : 1;
+    renderApp(); persist(); return;
+  }
+  if(act==='month'){
+    var mIdx=parseInt(el.dataset.month,10);
+    var pos=state.selectedMonths.indexOf(mIdx);
+    if(pos!==-1){
+      if(state.selectedMonths.length===1){
+        showToast('Debe quedar al menos un mes seleccionado');
+      } else {
+        state.selectedMonths.splice(pos,1);
+      }
+    } else {
+      state.selectedMonths.push(mIdx);
+    }
+    renderApp(); persist(); return;
+  }
+  if(act==='export'){
+    openExportModal();
+    return;
+  }
+  if(act==='piazza-filter-all'){
+    state.piazzaFilter=[];
+    renderApp(); persist(); return;
+  }
+  if(act==='piazza-filter-toggle'){
+    var fPzId=el.dataset.pz;
+    var fPos=state.piazzaFilter.indexOf(fPzId);
+    if(fPos!==-1){ state.piazzaFilter.splice(fPos,1); } else { state.piazzaFilter.push(fPzId); }
+    renderApp(); persist(); return;
+  }
+  if(act==='sort-piazza'){
+    state.sortMode='piazza';
+    renderApp(); persist(); return;
+  }
+  if(act==='sort-marcado'){
+    state.sortMode='marcado';
+    renderApp(); persist(); return;
+  }
+  if(readOnly) return;
+  if(act==='cycle'){
+    var itemId=el.dataset.item, cMo=parseInt(el.dataset.month,10), dy=parseInt(el.dataset.day,10);
+    var cur=getCell(itemId,state.year,cMo,dy);
+    setCell(itemId,state.year,cMo,dy,{status:cycleStatus(cur.status)});
+    renderApp(); persist(); return;
+  }
+  if(act==='note'){
+    e.stopPropagation();
+    openNoteModal(el.dataset.item,parseInt(el.dataset.month,10),parseInt(el.dataset.day,10));
+    return;
+  }
+  if(act==='remove-piazza'){
+    var id=el.dataset.pz;
+    var pzToRemove=state.piazzas.filter(function(p){return p.id===id;})[0];
+    if(pzToRemove){
+      pzToRemove.items.forEach(function(it){
+        Object.keys(state.cells).forEach(function(k){if(k.indexOf(it.id+'__')===0) delete state.cells[k];});
+        dbDeleteItemCells(it.id);
+      });
+    }
+    state.piazzas=state.piazzas.filter(function(p){return p.id!==id;});
+    dbDeletePiazza(id);
+    renderApp(); persist(); return;
+  }
+  if(act==='toggle-piazza'){
+    var tPz=state.piazzas.filter(function(p){return p.id===el.dataset.pz;})[0];
+    if(tPz){tPz.collapsed=!tPz.collapsed; renderApp(); persist(); dbUpsertPiazza(tPz);}
+    return;
+  }
+  if(act==='toggle-category'){
+    var cPz=state.piazzas.filter(function(p){return p.id===el.dataset.pz;})[0];
+    if(cPz){
+      var cCat=el.dataset.cat;
+      cPz.collapsedCats[cCat]=!cPz.collapsedCats[cCat];
+      renderApp(); persist(); dbUpsertPiazza(cPz);
+    }
+    return;
+  }
+  if(act==='collapse-all'){
+    state.piazzas.forEach(function(p){
+      p.collapsed=true;
+      CATEGORY_ORDER.forEach(function(c){p.collapsedCats[c]=true;});
+      dbUpsertPiazza(p);
+    });
+    renderApp(); persist(); return;
+  }
+  if(act==='expand-all'){
+    state.piazzas.forEach(function(p){
+      p.collapsed=false;
+      CATEGORY_ORDER.forEach(function(c){p.collapsedCats[c]=false;});
+      dbUpsertPiazza(p);
+    });
+    renderApp(); persist(); return;
+  }
+  if(act==='add-piazza'){
+    var newPz={id:uid(),name:'Nueva Piazza',collapsed:false,collapsedCats:{},items:[]};
+    state.piazzas.push(newPz);
+    renderApp(); persist(); dbUpsertPiazza(newPz);
+    var inputs=document.querySelectorAll('.piazza-name');
+    if(inputs.length){var last=inputs[inputs.length-1]; last.focus(); last.select();}
+    return;
+  }
+  if(act==='remove-item'){
+    var itId=el.dataset.item, ownerPzId=el.dataset.pz;
+    var ownerPz=state.piazzas.filter(function(p){return p.id===ownerPzId;})[0];
+    if(ownerPz){
+      ownerPz.items=ownerPz.items.filter(function(it){return it.id!==itId;});
+      Object.keys(state.cells).forEach(function(k){if(k.indexOf(itId+'__')===0) delete state.cells[k];});
+      renderApp(); persist();
+      dbUpsertPiazza(ownerPz);
+      dbDeleteItemCells(itId);
+    }
+    return;
+  }
+  if(act==='clear-confirm-open'){
+    openClearConfirmModal(el.dataset.status||null);
+    return;
+  }
+}
+
+function onAppInputCommit(e){
+  var t=e.target;
+  if(t.classList && t.classList.contains('piazza-name')){
+    var pz=state.piazzas.filter(function(p){return p.id===t.dataset.pz;})[0];
+    if(pz){
+      pz.name=t.value.trim()||pz.name;
+      t.value=pz.name;
+      persist();
+      dbUpsertPiazza(pz);
+    }
+    return;
+  }
+  if(t.classList && t.classList.contains('item-label')){
+    var found=findItem(t.dataset.item);
+    if(found){
+      found.item.label=t.value.trim();
+      persist();
+      dbUpsertPiazza(found.piazza);
+    }
+    return;
+  }
+}
+
+function onAppKeydown(e){
+  var t=e.target;
+  if(t.classList && t.classList.contains('quick-add-input')){
+    if(e.key!=='Enter') return;
+    e.preventDefault();
+    if(readOnly) return;
+    var val=t.value.trim();
+    if(!val) return;
+    var pzId=t.dataset.pz, cat=t.dataset.cat;
+    var pz=state.piazzas.filter(function(p){return p.id===pzId;})[0];
+    if(!pz) return;
+    pz.items.push({id:uid(),category:cat,label:val});
+    renderApp(); persist();
+    dbUpsertPiazza(pz);
+    var next=document.querySelector('.quick-add-input[data-pz="'+pzId+'"][data-cat="'+cat+'"]');
+    if(next){next.focus();}
+    return;
+  }
+  if(t.classList && t.classList.contains('cell')){
+    if(e.key!=='Delete' && e.key!=='Backspace') return;
+    e.preventDefault();
+    if(readOnly) return;
+    var kItem=t.dataset.item, kMo=parseInt(t.dataset.month,10), kDy=parseInt(t.dataset.day,10);
+    var kCur=getCell(kItem,state.year,kMo,kDy);
+    if(kCur.status==='vacio' && !kCur.note) return;
+    setCell(kItem,state.year,kMo,kDy,{status:'vacio',note:''});
+    renderApp(); persist();
+    var again=document.querySelector('.cell[data-item="'+kItem+'"][data-month="'+kMo+'"][data-day="'+kDy+'"]');
+    if(again){ again.focus(); }
+    return;
+  }
+}
+
+function onModalClick(e){
+  var el=e.target.closest('[data-act]');
+  if(!el) return;
+  if(el.dataset.act==='modal-close'){
+    if(e.target===el){closeModal();}
+    return;
+  }
+  if(el.dataset.act==='set-status'){
+    var root=document.getElementById('modal-root');
+    root.dataset.status=el.dataset.status;
+    root.querySelectorAll('.status-choice').forEach(function(b){b.classList.remove('active');});
+    el.classList.add('active');
+    return;
+  }
+  if(el.dataset.act==='save-note'){
+    var itemId=el.dataset.item, sMo=parseInt(el.dataset.month,10), dy=parseInt(el.dataset.day,10);
+    var root=document.getElementById('modal-root');
+    var note=document.getElementById('note-text').value.trim();
+    var status=root.dataset.status;
+    setCell(itemId,state.year,sMo,dy,{status:status,note:note});
+    closeModal();
+    renderApp(); persist();
+    return;
+  }
+  if(el.dataset.act==='export-all-months'){setAllChecks('month',true);return;}
+  if(el.dataset.act==='export-none-months'){setAllChecks('month',false);return;}
+  if(el.dataset.act==='export-all-piazzas'){setAllChecks('piazza',true);return;}
+  if(el.dataset.act==='export-none-piazzas'){setAllChecks('piazza',false);return;}
+  if(el.dataset.act==='export-generate'){runExportGenerate();return;}
+  if(el.dataset.act==='clear-confirm'){
+    var clStatus=el.dataset.status||null;
+    var n=clearCells(clStatus);
+    closeModal();
+    renderApp(); persist();
+    showToast(n?('Se limpiaron '+n+' pendiente'+(n===1?'':'s')):'No había nada que limpiar');
+    return;
+  }
+}
+
+window.addEventListener('afterprint',function(){
+  document.body.classList.remove('printing');
+});
+
+/* ---------- init ---------- */
+
+function loadInitialState(){
+  var seedRaw=document.getElementById('state-data').textContent;
+  if(seedRaw && seedRaw.trim()){
+    try{
+      var parsed=JSON.parse(seedRaw);
+      if(parsed && parsed.piazzas) return migrateState(parsed);
+    }catch(e){}
+  }
+  try{
+    var ls=localStorage.getItem(STORAGE_KEY);
+    if(ls){
+      var parsedLs=JSON.parse(ls);
+      if(parsedLs && parsedLs.piazzas) return migrateState(parsedLs);
+    }
+    var lsOld=localStorage.getItem('cronograma-piazza-v1');
+    if(lsOld){
+      var parsedOld=JSON.parse(lsOld);
+      if(parsedOld && parsedOld.piazzas) return migrateState(parsedOld);
+    }
+  }catch(e){}
+  return defaultState();
+}
+
+function init(){
+  state=loadInitialState();
+  syncStateScript();
+  renderApp();
+
+  document.getElementById('app').addEventListener('click',onAppClick);
+  document.getElementById('app').addEventListener('change',onAppInputCommit);
+  document.getElementById('app').addEventListener('keydown',onAppKeydown);
+  document.getElementById('modal-root').addEventListener('click',onModalClick);
+  window.addEventListener('resize',updateStickyBarHeight);
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(updateStickyBarHeight).catch(function(){});
+  }
+
+  if(window.claude && typeof window.claude.use==='function'){
+    window.claude.use('db').then(function(api){
+      dbApi=api;
+      if(dbApi){ hydrateFromDb(); } else { initFirebaseDb(); }
+    }).catch(function(){ initFirebaseDb(); });
+  } else {
+    initFirebaseDb();
+  }
+}
+
+/* ---------- respaldo: Firebase (cuando se abre fuera de Claude, ej. GitHub) ----------
+   Esta copia (index.html) no corre dentro de Claude, así que no tiene la
+   capacidad "db" del artefacto. Usa en su lugar un proyecto de Firebase
+   propio con la misma forma de API (collection/doc/set/update/delete/
+   onSnapshot), por lo que el resto del código de sincronización de arriba
+   funciona igual sin cambios. */
+var FIREBASE_CONFIG={
+  apiKey: "AIzaSyD6KPe1yK-KdNjb4CfsE9vnzTA88crOyYo",
+  authDomain: "cronograma-piazza.firebaseapp.com",
+  projectId: "cronograma-piazza",
+  storageBucket: "cronograma-piazza.firebasestorage.app",
+  messagingSenderId: "103654110339",
+  appId: "1:103654110339:web:4b5e4f670ed7f3b92a57b6"
+};
+function initFirebaseDb(){
+  try{
+    if(typeof firebase==='undefined'){ dbApi=null; return; }
+    if(!firebase.apps || !firebase.apps.length){ firebase.initializeApp(FIREBASE_CONFIG); }
+    dbApi=firebase.firestore();
+    hydrateFromDb();
+  }catch(e){ dbApi=null; }
+}
+
+/* ---------- sincronización con la base de datos permanente ---------- */
+
+var lastPzSnap=null, lastCellSnap=null, dbSeeded=false;
+
+function applyDbSnapshots(pzSnap, cellSnap){
+  var pzDocs=pzSnap.docs.slice().sort(function(a,b){
+    var da=a.data()||{}, dbb=b.data()||{};
+    var oa=typeof da.order==='number'?da.order:0;
+    var ob=typeof dbb.order==='number'?dbb.order:0;
+    return oa-ob;
+  });
+  var newPiazzas=pzDocs.map(function(d){
+    var data=d.data()||{};
+    return {
+      id: d.id,
+      name: data.name||'',
+      collapsed: !!data.collapsed,
+      collapsedCats: data.collapsedCats||{},
+      items: Array.isArray(data.items)?data.items:[]
+    };
+  });
+  var newCells={};
+  cellSnap.docs.forEach(function(d){
+    var data=d.data()||{};
+    Object.keys(data).forEach(function(dateStr){
+      var val=data[dateStr];
+      if(val && ((val.status && val.status!=='vacio') || val.note)){
+        newCells[d.id+'__'+dateStr]={status:val.status||'vacio',note:val.note||''};
+      }
+    });
+  });
+  state.piazzas=newPiazzas;
+  state.cells=newCells;
+  renderApp();
+  syncStateScript();
+}
+
+function seedDbFromState(){
+  /* Se guarda cada Piazza y cada pendiente en su propio documento. Se
+     espera a que TODAS las escrituras terminen (Promise.all) antes de
+     volver a aceptar actualizaciones desde la base de datos: como no
+     hay transacciones, si se reconstruyera el estado a mitad de este
+     guardado inicial se perdería información (carrera de datos). */
+  var writes=[];
+  state.piazzas.forEach(function(pz){ writes.push(dbUpsertPiazza(pz)); });
+  var byItem={};
+  Object.keys(state.cells).forEach(function(k){
+    var idx=k.indexOf('__');
+    var itemId=k.slice(0,idx);
+    var dateStr=k.slice(idx+2);
+    byItem[itemId]=byItem[itemId]||{};
+    byItem[itemId][dateStr]=state.cells[k];
+  });
+  Object.keys(byItem).forEach(function(itemId){
+    writes.push(dbApi.collection('cells').doc(itemId).set(byItem[itemId]).catch(function(){}));
+  });
+  return Promise.all(writes);
+}
+
+function hydrateFromDb(){
+  var pzGotFirst=false, cellGotFirst=false, seedingInProgress=false;
+  function onBoth(){
+    if(seedingInProgress) return;
+    if(!dbSeeded && lastPzSnap && lastPzSnap.empty){
+      dbSeeded=true;
+      seedingInProgress=true;
+      seedDbFromState().then(function(){ seedingInProgress=false; });
+      return;
+    }
+    dbSeeded=true;
+    applyDbSnapshots(lastPzSnap,lastCellSnap);
+  }
+  dbApi.collection('piazzas').onSnapshot(function(snap){
+    lastPzSnap=snap; pzGotFirst=true;
+    if(cellGotFirst) onBoth();
+  }, function(){});
+  dbApi.collection('cells').onSnapshot(function(snap){
+    lastCellSnap=snap; cellGotFirst=true;
+    if(pzGotFirst) onBoth();
+  }, function(){});
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',init);
+} else {
+  init();
+}
+
+})();
+</script></body></html>
